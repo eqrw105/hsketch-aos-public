@@ -85,8 +85,8 @@ class PictureDetailActivity : AppCompatActivity() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.picture_detail_menu_report -> {
-                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
-                DM.getInstance().showToast(this, "1")
+                onReportPicture()
+                DM.getInstance().showToast(this, getString(R.string.picture_report_success))
             }
             R.id.picture_detail_menu_remove -> {
                 val user_id = mFirebaseAuth.currentUser.uid
@@ -164,5 +164,15 @@ class PictureDetailActivity : AppCompatActivity() {
         }catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+    private fun onReportPicture(){
+        val params = ArrayList<MultipartBody.Part>()
+        params.add(MultipartBody.Part.createFormData("reqcmd", "picture_report"))
+        params.add(MultipartBody.Part.createFormData("picture_id", mPicture_Id))
+        params.add(MultipartBody.Part.createFormData("user_id", mPicture_UserId))
+
+        //HTTP 통신
+        DM.getInstance().onHTTP_POST_Connect(this, params, null)
     }
 }
