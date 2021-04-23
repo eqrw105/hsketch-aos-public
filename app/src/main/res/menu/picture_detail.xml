@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/picture_detail_menu_report"
+        android:title="@string/picture_detail_menu_report_title" />
+
+    <item android:id="@+id/picture_detail_menu_remove"
+        android:title="@string/picture_detail_menu_remove_title" />
+
+</menu>

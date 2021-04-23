@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PictureActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/picture_coordinatorlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/picture_appbarlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/picture_collapsingtoolbarlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@color/colorPrimaryDark"
+                app:expandedTitleGravity="center"
+                app:expandedTitleMarginTop="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:title="@string/app_name"
+                app:titleEnabled="true">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="@drawable/picture_mainimage_bg">
+
+                    <ImageView
+                        android:id="@+id/picture_imageview_mainimage"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintDimensionRatio="@string/picture_mainimage_ratio"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/picture_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:menu="@menu/top_picture"
+                    app:navigationIcon="@drawable/baseline_logo_color_36" />
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_large"
+            android:padding="@dimen/padding_medium"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/picture_textview_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/picture_image_margin"
+                    android:text="@string/picture_title1"
+                    android:textColor="@color/picture_view"
+                    android:textSize="@dimen/textsize_large"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/picture_recyclerview_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintDimensionRatio="@string/picture_vertical_ratio"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_textview_title" />
+
+
+                <TextView
+                    android:id="@+id/picture_textview_title2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/picture_image_margin"
+                    android:text="@string/picture_title2"
+                    android:textColor="@color/picture_view"
+                    android:textSize="@dimen/textsize_large"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_recyclerview_1"
+                    tools:layout_editor_absoluteX="0dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/picture_recyclerview_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintDimensionRatio="@string/picture_vertical_ratio"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_textview_title2" />
+
+                <TextView
+                    android:id="@+id/picture_textview_title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:paddingLeft="@dimen/picture_image_margin"
+                    android:text="@string/picture_title3"
+                    android:textColor="@color/picture_view"
+                    android:textSize="@dimen/textsize_large"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_recyclerview_2"
+                    tools:layout_editor_absoluteX="0dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/picture_recyclerview_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layout_constraintDimensionRatio="@string/picture_vertical_ratio"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/picture_textview_title3" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/picture_floatingactionbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_xlarge"
+            android:backgroundTint="@color/colorPrimary"
+            android:clickable="true"
+            android:src="@drawable/baseline_brush_white_36"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/floatingactionbutton_elevation"
+            app:fabSize="auto"
+            app:layout_anchor="@id/picture_appbarlayout"
+            app:layout_anchorGravity="right|bottom" />
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

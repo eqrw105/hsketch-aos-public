@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/setting_constraintlayout_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/setting_imageview_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/baseline_arrow_back_white_36"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_constraintlayout_top">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_campaign_white_24"
+                app:itemTitleText="@string/setting_notice" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_verified_white_24"
+                app:itemTitleText="@string/setting_version" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_shared"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_share_white_24"
+                app:itemTitleText="@string/setting_shared" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_mypicture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_person_white_24"
+                app:itemTitleText="@string/setting_mypicture" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                app:itemDrawable="@drawable/baseline_description_white_24"
+                app:itemTitleText="@string/setting_pollicy" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_termsofservice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_description_white_24"
+                app:itemTitleText="@string/setting_termsofservice" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_inquiry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_call_white_24"
+                app:itemTitleText="@string/setting_inquiry" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_logout_white_24"
+                app:itemTitleText="@string/setting_logout" />
+
+
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

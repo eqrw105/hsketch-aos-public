@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="draw_stroke_size_max">100</integer>
+    <integer name="draw_stroke_size_min">1</integer>
+    <integer name="draw_stroke_ahlpa_max">255</integer>
+    <integer name="draw_stroke_ahlpa_min">1</integer>
+    <!--
+    1000000000 => 1십억
+    100000 => 10만
+    1000 => 1천
+    999 => 999
+    -->
+    <integer name="compress_int_unit_1">1000000000</integer>
+    <integer name="compress_int_unit_2">100000</integer>
+    <integer name="compress_int_unit_3">1000</integer>
+</resources>

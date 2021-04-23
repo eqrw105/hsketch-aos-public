@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/picture_image_margin">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_search_picture_constraintlayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clickable="true"
+        android:foreground="?selectableItemBackgroundBorderless"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="@string/picture_vertical_ratio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/layout_search_picture_cardview"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/picture_image_margin"
+            app:cardCornerRadius="@dimen/picture_image_radius"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="@string/picture_ratio"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/layout_search_picture_imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:transitionName="@string/transition_name"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/layout_search_picture_cardview"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/layout_search_picture_textview_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:padding="@dimen/padding_regular"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/textsize_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/layout_search_picture_textview_description"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:ellipsize="end"
+                android:gravity="top"
+                android:padding="@dimen/padding_regular"
+                android:textColor="@color/hintPrimary"
+                android:textSize="@dimen/textsize_medium"
+                app:layout_constraintBottom_toTopOf="@+id/layout_search_picture_textview_like"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_search_picture_textview_title" />
+
+            <TextView
+                android:id="@+id/layout_search_picture_textview_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/baseline_favorite_white_16"
+                android:drawableTint="@color/picture_favorite"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="@dimen/padding_regular"
+                android:textColor="@color/textPrimary"
+                android:textSize="@dimen/textsize_medium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

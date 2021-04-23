@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="settingItemViewData">
+        <attr name="itemTitleText" format="reference|string" />
+    <!--    <attr name="itemTitleTextColor" format="reference|color" /> -->
+        <attr name="itemDrawable" format="reference" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@android:color/holo_red_dark</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#03DAC5</color>
+
+
+    <color name="textPrimaryDark">#222222</color>
+    <color name="textPrimary">#ffffff</color>
+    <color name="hintPrimary">#444444</color>
+
+
+    <color name="Black_900">#000000</color>
+    <color name="White_900">#ffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="Gray_100">#c9c9c9</color>
+    <color name="Gray_500">#666666</color>
+    <color name="Gray_900">#222222</color>
+    <color name="picture_category">#ffffff</color>
+    <color name="picture_view">#ffffff</color>
+
+    <color name="drawview_bg">#ffffff</color>
+
+    <color name="drawing_pensize_seekbar_tumb_solid">@color/colorPrimary</color>
+    <color name="drawing_pensize_seekbar_tumb_storke">@color/colorPrimary</color>
+    <color name="drawing_pensize_seekbar_progress">@color/colorPrimary</color>
+    <color name="drawing_pensize_seekbar_bg">@android:color/holo_red_light</color>
+
+    <color name="drawing_penalpha_seekbar_tumb_solid">@android:color/holo_green_dark</color>
+    <color name="drawing_penalpha_seekbar_tumb_storke">@android:color/holo_green_dark</color>
+    <color name="drawing_penalpha_seekbar_progress">@android:color/holo_green_dark</color>
+    <color name="drawing_penalpha_seekbar_bg">@android:color/holo_green_light</color>
+
+    <color name="bottomnavigation_unchecked">#4D4D4D</color>
+    <color name="bottomnavigation_checked">#ffffff</color>
+    <color name="menu_button_bg">#4D4D4D</color>
+    <color name="drawing_cardview_menu_bg">#30c9c9c9</color>
+
+    <color name="picture_mainimage_gradient_start">#000000</color>
+    <color name="picture_mainimage_gradient_center">#20000000</color>
+    <color name="picture_mainimage_gradient_end">#000000</color>
+
+    <color name="picture_gradient_start">#30000000</color>
+    <color name="picture_gradient_center">@color/transparent</color>
+    <color name="picture_gradient_end">#30000000</color>
+
+    <color name="picture_floatingbutton">@android:color/holo_orange_dark</color>
+
+    <color name="picture_favorite">#FF3333</color>
+
+</resources>
