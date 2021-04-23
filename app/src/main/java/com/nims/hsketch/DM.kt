@@ -27,18 +27,25 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DM {
     private val mStorageExternalPermissionRequestCode       = 1001
     private val mCompressIntRound                           = "%.1f"
     private val mStringHideText                             = "*"
+    private val mDateFormatType                             = "yyyy-MM-dd hh:mm:ss"
 
 
     companion object {
 
         private var mInstance                   : DM?       = null
 
-        open var mItentkey_PictureId                        = "picture_id"
+        open var mIntentkey_PictureId                       = "picture_id"
+        open var mIntentkey_Web                             = "web"
+        open var mIntentKey_Privacy                         = "privacy"
+        open var mIntentKey_Termsofservice                  = "termsofservice"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
         open val mGoogleEmailType                           = "@gmail.com"
@@ -83,6 +90,15 @@ class DM {
     ) {
         val intent = Intent(startActivity, endActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity.startActivity(intent)
+        startActivity.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
+    }
+
+    open fun startActivity(
+        startActivity: Activity,
+        intent: Intent
+    ) {
+        intent
         startActivity.startActivity(intent)
         startActivity.overridePendingTransition(R.anim.activity_slide_in, R.anim.activity_slide_out)
     }
@@ -174,6 +190,15 @@ class DM {
 
     open fun showToast(context: Context, message: String){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    open fun getNow(): String{
+        val time             = System.currentTimeMillis()
+        val date             = Date(time)
+        val simpleDateFormat = SimpleDateFormat(mDateFormatType)
+        val now              = simpleDateFormat.format(date)
+        Log.d("eeer", now)
+        return now
     }
 
     // HTTP 통신 성공 후 리턴값을 매개변수로 UI 적용 메서드 호출

@@ -148,7 +148,7 @@ class SearchActivity : AppCompatActivity() {
 
             holder.mLayout_Search_Picture_Constraintlayout.setOnClickListener {
                 val intent = Intent(context, PictureDetailActivity::class.java)
-                intent.putExtra(DM.mItentkey_PictureId, item.getPictureId())
+                intent.putExtra(DM.mIntentkey_PictureId, item.getPictureId())
                 DM.getInstance().startActivityTransition(context, holder.mLayout_Search_Picture_Imageview, activity, intent)
             }
 

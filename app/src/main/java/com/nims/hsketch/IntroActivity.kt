@@ -136,6 +136,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         params.add(MultipartBody.Part.createFormData("reqcmd", "user_register"))
         params.add(MultipartBody.Part.createFormData("user_id", user_id))
         params.add(MultipartBody.Part.createFormData("user_email", user_email))
+        params.add(MultipartBody.Part.createFormData("user_date", DM.getInstance().getNow()))
 
         //HTTP 통신
         DM.getInstance().onHTTP_POST_Connect(this, params, ::onRegisterResult)

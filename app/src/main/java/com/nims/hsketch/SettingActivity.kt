@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Notice         : SettingItemView
@@ -74,12 +73,16 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
                 DM.getInstance().startActivity(this, MypictureActivity())
             }
             R.id.setting_settingitemview_privacy ->{
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.BASE_URL + BuildConfig.PRIVACY_END_POINT))
-                startActivity(intent)
+                val intent = Intent(this, WebActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra(DM.mIntentkey_Web, DM.mIntentKey_Privacy)
+                DM.getInstance().startActivity(this, intent)
             }
             R.id.setting_settingitemview_termsofservice ->{
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.BASE_URL + BuildConfig.TERMSOFSERVICE_END_POINT))
-                startActivity(intent)
+                val intent = Intent(this, WebActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intent.putExtra(DM.mIntentkey_Web, DM.mIntentKey_Termsofservice)
+                DM.getInstance().startActivity(this, intent)
             }
             R.id.setting_settingitemview_inquiry ->{
                 val intent = Intent(Intent.ACTION_SEND)

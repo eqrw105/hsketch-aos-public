@@ -118,8 +118,9 @@ class BottomSheetDrawingUpload(
             params.add(MultipartBody.Part.createFormData("reqcmd", "picture_upload"))
             params.add(MultipartBody.Part.createFormData("picture_title", pictureTitle))
             params.add(MultipartBody.Part.createFormData("picture_description", pictureDescription))
-            params.add(MultipartBody.Part.createFormData("picture_user",currentUser.uid))
+            params.add(MultipartBody.Part.createFormData("picture_user", currentUser.uid))
             params.add(MultipartBody.Part.createFormData("picture_path", BuildConfig.BASE_PATH + currentUser.uid + "/"))//이미지 경로
+            params.add(MultipartBody.Part.createFormData("picture_date", DM.getInstance().getNow()))
 
             //HTTP 통신
             DM.getInstance().onHTTP_POST_Connect(activity!!, params, this::onSendImageToServerResult)
@@ -127,15 +128,18 @@ class BottomSheetDrawingUpload(
     }
 
     private fun onSendImageToServerResult(response: Response<ResponseBody>) {
-        val responseStringFromJson = response.body()!!.string() as String
-        val jsonObject = JSONObject(responseStringFromJson)
+        try {
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject = JSONObject(responseStringFromJson)
             Log.d("response =>", jsonObject.toString())
             //올리려는 파일명이 이미 있으면 중복이라 알리고 멈춤
             if (jsonObject.get("isFile") == true) {
                 DM.getInstance().showToast(activity!!, activity!!.getString(R.string.drawing_upload_isfile))
                 return
             }
-
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
         DM.getInstance().showToast(activity!!, activity!!.getString(R.string.picture_upload_success))
         dismiss()
 

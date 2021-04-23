@@ -243,7 +243,7 @@ class PictureActivity : AppCompatActivity() {
         private fun onPictureClick(holder: Holder, item: PictureData){
             holder.mLayout_Main_Picture_Cardview.setOnClickListener {
                 val intent = Intent(context, PictureDetailActivity::class.java)
-                intent.putExtra(DM.mItentkey_PictureId, item.getPictureId())
+                intent.putExtra(DM.mIntentkey_PictureId, item.getPictureId())
                 DM.getInstance().startActivityTransition(context, it, activity, intent)
             }
         }

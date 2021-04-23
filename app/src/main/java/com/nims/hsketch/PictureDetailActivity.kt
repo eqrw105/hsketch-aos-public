@@ -19,6 +19,7 @@ import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Response
+import kotlin.properties.Delegates
 
 class PictureDetailActivity : AppCompatActivity() {
     private lateinit var mPicture_Detail_Textview_Title       : TextView
@@ -31,6 +32,7 @@ class PictureDetailActivity : AppCompatActivity() {
     private lateinit var mPicture_UserId                      : String
     private lateinit var mPicture_Id                          : String
     private lateinit var mFirebaseAuth                        : FirebaseAuth
+    private var mFavoriteStatus by Delegates.notNull<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +50,8 @@ class PictureDetailActivity : AppCompatActivity() {
         mPicture_Detail_Textview_Favorite    = findViewById(R.id.picture_detail_textview_favorite)
         mPicture_Detail_Imageview_Menu       = findViewById(R.id.picture_detail_imageview_menu)
         mFirebaseAuth                        = FirebaseAuth.getInstance()
-        val picture_id                       = intent.getIntExtra(DM.mItentkey_PictureId, -1)
-
+        val picture_id                       = intent.getIntExtra(DM.mIntentkey_PictureId, -1)
+        mFavoriteStatus = false
         onPictureDetail(picture_id)
         onActivityFinish()
         onFavorite()
@@ -58,6 +60,12 @@ class PictureDetailActivity : AppCompatActivity() {
 
     private fun onFavorite(){
         mPicture_Detail_Imageview_Favorite.setOnClickListener {
+            if(mFavoriteStatus){
+                mPicture_Detail_Imageview_Favorite.setColorFilter(R.color.White_900)
+            }else{
+                mPicture_Detail_Imageview_Favorite.setColorFilter(R.color.picture_favorite)
+            }
+            mFavoriteStatus = !mFavoriteStatus
 
         }
     }
@@ -83,13 +91,13 @@ class PictureDetailActivity : AppCompatActivity() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
+        val user_id = mFirebaseAuth.currentUser.uid
         when(item.itemId){
             R.id.picture_detail_menu_report -> {
                 onReportPicture()
                 DM.getInstance().showToast(this, getString(R.string.picture_report_success))
             }
             R.id.picture_detail_menu_remove -> {
-                val user_id = mFirebaseAuth.currentUser.uid
                 if(user_id == mPicture_UserId) {
                     onRemovePicture()
                 }else{
@@ -171,6 +179,7 @@ class PictureDetailActivity : AppCompatActivity() {
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_report"))
         params.add(MultipartBody.Part.createFormData("picture_id", mPicture_Id))
         params.add(MultipartBody.Part.createFormData("user_id", mPicture_UserId))
+        params.add(MultipartBody.Part.createFormData("report_date", DM.getInstance().getNow()))
 
         //HTTP 통신
         DM.getInstance().onHTTP_POST_Connect(this, params, null)

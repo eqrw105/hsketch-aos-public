@@ -210,7 +210,7 @@ class MypictureActivity : AppCompatActivity() {
                 if(item.getMypictureAgree() == DM.mPictureStatusAgree) {
                     //승인된 게시물이면 상세페이지로 이동
                     val intent = Intent(context, PictureDetailActivity::class.java)
-                    intent.putExtra(DM.mItentkey_PictureId, item.getMypictureId())
+                    intent.putExtra(DM.mIntentkey_PictureId, item.getMypictureId())
                     DM.getInstance().startActivityTransition(context, it, activity, intent)
                 }else{
                     //승인 안된 게시물이면 업로드 취소할건지 띄우기
@@ -250,6 +250,7 @@ class MypictureActivity : AppCompatActivity() {
 
             if(itemCount>1) {
                 arrayList.removeAt(position)
+                notifyItemRemoved(position)
                 notifyItemRangeRemoved(0, arrayList.size)
             }else{
                 arrayList.removeAt(position)
