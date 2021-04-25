@@ -106,7 +106,7 @@ class BottomSheetDrawingUpload(
 
             if (pictureTitle.isBlank()
                 ||pictureDescription.isBlank()) {
-                DM.getInstance().showToast(activity!!, "빈칸을 채워주세요")
+                DM.getInstance().showToast(activity!!, getString(R.string.blank))
                 return@setOnClickListener
             }
 

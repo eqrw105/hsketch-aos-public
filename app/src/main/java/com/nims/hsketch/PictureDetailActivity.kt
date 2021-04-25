@@ -64,7 +64,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
     private fun setLike(picture_like: String){
         mPicture_Detail_Imageview_Favorite.imageTintList = ColorStateList.valueOf(getColor(R.color.picture_favorite))
-        mPicture_Detail_Textview_Favorite.text           = "회원님 외 $picture_like"
+        mPicture_Detail_Textview_Favorite.text           = getString(R.string.favorite_status_true_text) + picture_like
     }
 
     private fun setUnLike(picture_like: String){
@@ -142,10 +142,11 @@ class PictureDetailActivity : AppCompatActivity() {
             mPicture_Detail_Textview_Title.text       = picture_title
             mPicture_Detail_Textview_Description.text = picture_description
 
-            val compress_pictureLike = DM.getInstance().compressInt(this, mPicture_Like)
             if(picture_favorite == true){
+                val compress_pictureLike = DM.getInstance().compressInt(this, --mPicture_Like)
                 setLike(compress_pictureLike)
             }else{
+                val compress_pictureLike = DM.getInstance().compressInt(this, mPicture_Like)
                 setUnLike(compress_pictureLike)
             }
 
