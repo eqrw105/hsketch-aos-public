@@ -90,6 +90,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     private fun onRegister(){
         mIntro_Sigininbutton_Google.setOnClickListener {
+            if(!DM.getInstance().getInternetCheck(this)) return@setOnClickListener
             val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
             startActivityForResult(intent, DM.mGoogleSignRequestCode)
         }

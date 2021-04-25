@@ -49,4 +49,5 @@
     <string name="picture_remove_success">작품이 삭제되었습니다</string>
     <string name="picture_remove_user_not_admin">작품 게시자가 아닙니다</string>
     <string name="picture_report_success">신고가 접수되었습니다</string>
+    <string name="internet_not_connected">인터넷 연결을 확인하세요</string>
 </resources>

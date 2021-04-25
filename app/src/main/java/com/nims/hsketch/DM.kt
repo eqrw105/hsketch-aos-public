@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
@@ -200,9 +202,20 @@ class DM {
         return now
     }
 
+    open fun getInternetCheck(context: Context): Boolean{
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        if (activeNetwork != null) {
+            return (activeNetwork.type == ConnectivityManager.TYPE_WIFI || activeNetwork.type == ConnectivityManager.TYPE_MOBILE)
+        }
+        showToast(context, context.getString(R.string.internet_not_connected))
+        return false
+    }
+
     // HTTP 통신 성공 후 리턴값을 매개변수로 UI 적용 메서드 호출
     open fun onHTTP_POST_Connect(context: Context, params: ArrayList<MultipartBody.Part>, method: ((response: Response<ResponseBody>) -> Unit)?){
-
+        if(!getInternetCheck(context)) return
         val retrofit           = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).build()
         val retrofit_interface = retrofit.create(retrofit_interface::class.java)
 
