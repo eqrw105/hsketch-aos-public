@@ -51,5 +51,5 @@
     <string name="picture_report_success">신고가 접수되었습니다</string>
     <string name="internet_not_connected">인터넷 연결을 확인하세요</string>
     <string name="blank">공백을 채워주세요</string>
-    <string name="favorite_status_true_text">회원님 외　</string>
+    <string name="favorite_status_true_text">회원님 외</string>
 </resources>

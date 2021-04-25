@@ -64,7 +64,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
     private fun setLike(picture_like: String){
         mPicture_Detail_Imageview_Favorite.imageTintList = ColorStateList.valueOf(getColor(R.color.picture_favorite))
-        mPicture_Detail_Textview_Favorite.text           = getString(R.string.favorite_status_true_text) + picture_like
+        mPicture_Detail_Textview_Favorite.text           = getString(R.string.favorite_status_true_text) + " " + picture_like
     }
 
     private fun setUnLike(picture_like: String){
