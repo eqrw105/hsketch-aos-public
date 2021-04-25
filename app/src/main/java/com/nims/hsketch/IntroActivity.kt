@@ -109,7 +109,8 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         mFirebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener {
-                if (!it.isSuccessful) return@addOnCompleteListener//성공
+                if (!it.isSuccessful) return@addOnCompleteListener
+                //성공
                 val currentUser = mFirebaseAuth.currentUser
                 //첫 로그인(회원가입)일 때는 정보 DB 입력
                 if (it.result!!.additionalUserInfo.isNewUser) {
@@ -120,6 +121,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                         currentUser.displayName,
                         DM.getInstance().getNow()
                     )
+                    return@addOnCompleteListener
                 }
                 Log.d("googleLogin", "user login")
                 //이미 가입한사람이 로그인하면 마지막 접속일 업데이트
