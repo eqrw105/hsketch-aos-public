@@ -72,4 +72,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+
+    implementation 'com.aghajari.rlottie:AXrLottie:1.1.0'
+
 }

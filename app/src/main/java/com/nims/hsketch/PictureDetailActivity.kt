@@ -4,12 +4,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -61,7 +59,7 @@ class PictureDetailActivity : AppCompatActivity() {
     private fun onFavorite(){
         mPicture_Detail_Imageview_Favorite.setOnClickListener {
             if(mFavoriteStatus){
-                mPicture_Detail_Imageview_Favorite.setColorFilter(R.color.White_900)
+                mPicture_Detail_Imageview_Favorite.clearColorFilter()
             }else{
                 mPicture_Detail_Imageview_Favorite.setColorFilter(R.color.picture_favorite)
             }
@@ -95,7 +93,6 @@ class PictureDetailActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.picture_detail_menu_report -> {
                 onReportPicture()
-                DM.getInstance().showToast(this, getString(R.string.picture_report_success))
             }
             R.id.picture_detail_menu_remove -> {
                 if(user_id == mPicture_UserId) {
@@ -119,9 +116,14 @@ class PictureDetailActivity : AppCompatActivity() {
     private fun onPictureDetailResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
-            val responseStringFromJson  = response.body()!!.string() as String
-
-            val jsonObject          = JSONObject(responseStringFromJson)
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            val success                = jsonObject.get("success")
+            if(success == false){
+                DM.getInstance().showToast(this, getString(R.string.picture_detail_result_null))
+                finish()
+                return
+            }
             val picture_title       = jsonObject.get("picture_title")      .toString()
             val picture_description = jsonObject.get("picture_description").toString()
             val picture_like        = jsonObject.get("picture_like")       .toString().toInt()
@@ -139,10 +141,7 @@ class PictureDetailActivity : AppCompatActivity() {
             TooltipCompat.setTooltipText(mPicture_Detail_Imageview, picture_uploader)
 
             Log.d("detail_response =>", jsonObject.toString())
-
         }catch (e: Exception){
-            DM.getInstance().showToast(this, getString(R.string.picture_detail_result_null))
-            finish()
             e.printStackTrace()
         }
     }
@@ -164,11 +163,13 @@ class PictureDetailActivity : AppCompatActivity() {
         try{
             val responseStringFromJson  = response.body()!!.string() as String
             val jsonObject              = JSONObject(responseStringFromJson)
-
-            Log.d("detail_response =>", jsonObject.toString())
+            val success                 = jsonObject.get("success")
+            if(success == false) return
 
             DM.getInstance().showToast(this, getString(R.string.picture_remove_success))
             finish()
+
+            Log.d("remove_response =>", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -182,6 +183,20 @@ class PictureDetailActivity : AppCompatActivity() {
         params.add(MultipartBody.Part.createFormData("report_date", DM.getInstance().getNow()))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, null)
+        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReportPictureResult)
+    }
+
+    private fun onReportPictureResult(response: Response<ResponseBody>){
+        //JSON 형태의 문자열 타입
+        try{
+            val responseStringFromJson  = response.body()!!.string() as String
+            val jsonObject              = JSONObject(responseStringFromJson)
+            val success                 = jsonObject.get("success")
+            if(success == false) return
+            DM.getInstance().showToast(this, getString(R.string.picture_report_success))
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 }

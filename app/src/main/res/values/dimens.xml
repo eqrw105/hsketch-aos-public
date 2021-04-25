@@ -33,4 +33,6 @@
 
     <dimen name="drawing_pencolor_size">10dp</dimen>
 
+    <dimen name="favorite_size">48dp</dimen>
+
 </resources>

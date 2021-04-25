@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
@@ -95,18 +96,24 @@ class SearchActivity : AppCompatActivity() {
             mSearchList.clear()
             mSearchAdapter.notifyDataSetChanged()
 
-            val responseStringFromJson  = response.body()!!.string() as String
-            val jsonArray               = JSONArray(responseStringFromJson)
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            val success                = jsonObject.get("success")
+            val items                  = jsonObject.get("items").toString()
+            if(success == false){
+                return
+            }
+            val jsonArray              = JSONArray(items)
 
             if(jsonArray.length() == 0) DM.getInstance().showToast(this, getString(R.string.search_result_null))
 
             for (i in 0 until jsonArray.length()){
-                val jsonObject          = jsonArray.getJSONObject(i)
-                val picture_id          = jsonObject.get("picture_id").toString().toInt()
-                val picture_user        = jsonObject.get("picture_user").toString()
-                val picture_title       = jsonObject.get("picture_title").toString()
-                val picture_description = jsonObject.get("picture_description").toString()
-                val picture_like        = jsonObject.get("picture_like").toString().toInt()
+                val item          = jsonArray.getJSONObject(i)
+                val picture_id          = item.get("picture_id").toString().toInt()
+                val picture_user        = item.get("picture_user").toString()
+                val picture_title       = item.get("picture_title").toString()
+                val picture_description = item.get("picture_description").toString()
+                val picture_like        = item.get("picture_like").toString().toInt()
                 val pictureData = SearchData(
                     picture_id,
                     picture_user,

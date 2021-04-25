@@ -35,7 +35,7 @@ class DM {
     private val mStorageExternalPermissionRequestCode       = 1001
     private val mCompressIntRound                           = "%.1f"
     private val mStringHideText                             = "*"
-    private val mDateFormatType                             = "yyyy-MM-dd hh:mm:ss"
+    private val mDateFormatType                             = "yyyy-MM-dd HH:mm:ss"
 
 
     companion object {
@@ -197,7 +197,6 @@ class DM {
         val date             = Date(time)
         val simpleDateFormat = SimpleDateFormat(mDateFormatType)
         val now              = simpleDateFormat.format(date)
-        Log.d("eeer", now)
         return now
     }
 

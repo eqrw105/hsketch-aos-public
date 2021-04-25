@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_picture_detail.*
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
+import org.json.JSONObject
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
@@ -128,27 +129,7 @@ class PictureActivity : AppCompatActivity() {
     }
 
     private fun onReceivePicture1FromServerResult(response: Response<ResponseBody>){
-        try{
-            //JSON 형태의 문자열 타입
-            val responseStringFromJson = response.body()!!.string() as String
-            val jsonArray              = JSONArray(responseStringFromJson)
-
-            for (i in 0 until jsonArray.length()){
-                val jsonObject         = jsonArray.getJSONObject(i)
-                val picture_id         = jsonObject.get("picture_id")   .toString().toInt()
-                val picture_user       = jsonObject.get("picture_user") .toString()
-                val picture_title      = jsonObject.get("picture_title").toString()
-                val picture_like       = jsonObject.get("picture_like") .toString().toInt()
-                val pictureData        = PictureData(picture_id, picture_user, picture_title, picture_like)
-
-                mPictureList_1   .add(pictureData)
-                mPictureAdapter_1.notifyItemInserted(mPictureList_1.size-1)
-
-                Log.d("picture1_response", jsonObject.toString())
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
+        onUpdatePicture(response, mPictureList_1, mPictureAdapter_1)
     }
 
     //신규작품순서
@@ -161,27 +142,7 @@ class PictureActivity : AppCompatActivity() {
     }
 
     private fun onReceivePicture2FromServerResult(response: Response<ResponseBody>){
-        try{
-            //JSON 형태의 문자열 타입
-            val responseStringFromJson = response.body()!!.string() as String
-            val jsonArray              = JSONArray(responseStringFromJson)
-
-            for (i in 0 until jsonArray.length()){
-                val jsonObject         = jsonArray.getJSONObject(i)
-                val picture_id         = jsonObject.get("picture_id")   .toString().toInt()
-                val picture_user       = jsonObject.get("picture_user") .toString()
-                val picture_title      = jsonObject.get("picture_title").toString()
-                val picture_like       = jsonObject.get("picture_like") .toString().toInt()
-                val pictureData        = PictureData(picture_id, picture_user, picture_title, picture_like)
-
-                mPictureList_2   .add(pictureData)
-                mPictureAdapter_2.notifyItemInserted(mPictureList_2.size-1)
-
-                Log.d("picture2_response", jsonObject.toString())
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
+        onUpdatePicture(response, mPictureList_2, mPictureAdapter_2)
     }
 
     //신규작품순서
@@ -194,23 +155,31 @@ class PictureActivity : AppCompatActivity() {
     }
 
     private fun onReceivePicture3FromServerResult(response: Response<ResponseBody>){
+        onUpdatePicture(response, mPictureList_3, mPictureAdapter_3)
+    }
+
+    private fun onUpdatePicture(response: Response<ResponseBody>, arrayList: ArrayList<PictureData>, adapter: PictuerAdapter){
         try{
             //JSON 형태의 문자열 타입
             val responseStringFromJson = response.body()!!.string() as String
-            val jsonArray              = JSONArray(responseStringFromJson)
+            val jsonObject             = JSONObject(responseStringFromJson)
+            val success                = jsonObject.get("success")
+            val items                  = jsonObject.get("items").toString()
+            if(success == false) return
+            val jsonArray              = JSONArray(items)
 
             for (i in 0 until jsonArray.length()){
-                val jsonObject         = jsonArray.getJSONObject(i)
-                val picture_id         = jsonObject.get("picture_id")   .toString().toInt()
-                val picture_user       = jsonObject.get("picture_user") .toString()
-                val picture_title      = jsonObject.get("picture_title").toString()
-                val picture_like       = jsonObject.get("picture_like") .toString().toInt()
+                val item         = jsonArray.getJSONObject(i)
+                val picture_id         = item.get("picture_id")   .toString().toInt()
+                val picture_user       = item.get("picture_user") .toString()
+                val picture_title      = item.get("picture_title").toString()
+                val picture_like       = item.get("picture_like") .toString().toInt()
                 val pictureData        = PictureData(picture_id, picture_user, picture_title, picture_like)
 
-                mPictureList_3   .add(pictureData)
-                mPictureAdapter_3.notifyItemInserted(mPictureList_3.size-1)
+                arrayList.add(pictureData)
+                adapter  .notifyItemInserted(arrayList.size-1)
 
-                Log.d("picture3_response", jsonObject.toString())
+                Log.d("picture_response", jsonObject.toString())
             }
         }catch (e: Exception){
             e.printStackTrace()

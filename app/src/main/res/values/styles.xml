@@ -12,6 +12,7 @@
     </style>
 
     <style name="AppModalStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:background">@drawable/bottomsheet_drawing_upload_style</item>
     </style>
 

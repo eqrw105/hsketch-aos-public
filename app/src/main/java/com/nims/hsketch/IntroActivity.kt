@@ -45,7 +45,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             .build()
 
         onAppVersion()
-        onLogin()
+        onRegister()
     }
 
     //버전 체크
@@ -58,42 +58,37 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     private fun onAppVersionResult(response: Response<ResponseBody>){
-        //JSON 형태의 문자열 타입
-        val responseStringFromJson = response.body()!!.string() as String
-
         try{
-            val jsonArray = JSONArray(responseStringFromJson)
-            for (i in 0 until jsonArray.length()){
-                val jsonObject     = jsonArray.getJSONObject(i)
-                val config_version = jsonObject.get("config_version").toString()
-                val currentUser    = mFirebaseAuth.currentUser
+            //JSON 형태의 문자열 타입
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject     = JSONObject(responseStringFromJson)
+            val success        = jsonObject.get("success")
+            if(success == false) return
+            val config_version = jsonObject.get("config_version").toString()
+            val currentUser    = mFirebaseAuth.currentUser
 
-                Log.d("version => ", jsonObject.toString())
-                //버전 일치하면 다음 엑티비티
-                if(BuildConfig.VERSION_NAME != config_version) {
-                    //버전 미일치
-                    return
-                }
-
-                //이미 로그인중인가?
-                if(currentUser == null){
-                    //아니면 로그인하는 버튼 보여주기
-                    val animation                          = AnimationUtils.loadAnimation(this, R.anim.activity_slide_in)
-                    mIntro_Sigininbutton_Google.visibility = View.VISIBLE
-                    mIntro_Sigininbutton_Google.animation  = animation
-                    return
-                }
-                //맞으면 메인화면으로 이동
-                DM.getInstance().startActivity(this, PictureActivity())
-                finish()
+            Log.d("version => ", jsonObject.toString())
+            //버전 일치하면 다음 엑티비티
+            if(BuildConfig.VERSION_NAME != config_version) {
+                //버전 미일치
+                return
             }
+            //이미 로그인중인가?
+            if(currentUser == null){
+                //아니면 로그인하는 버튼 보여주기
+                val animation                          = AnimationUtils.loadAnimation(this, R.anim.activity_slide_in)
+                mIntro_Sigininbutton_Google.visibility = View.VISIBLE
+                mIntro_Sigininbutton_Google.animation  = animation
+                return
+            }
+            //마지막 접속일 업데이트
+            onLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
         }catch (e: Exception){
             e.printStackTrace()
         }
-
     }
 
-    private fun onLogin(){
+    private fun onRegister(){
         mIntro_Sigininbutton_Google.setOnClickListener {
             val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
             startActivityForResult(intent, DM.mGoogleSignRequestCode)
@@ -104,55 +99,93 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == DM.mGoogleSignRequestCode){
-            val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+        if (requestCode != DM.mGoogleSignRequestCode) return
 
-            if(result!!.isSuccess){
-                val account    = result.signInAccount
-                val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
+        val result     = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+        if (!result!!.isSuccess) return
 
-                mFirebaseAuth.signInWithCredential(credential)
-                    .addOnCompleteListener {
-                        if(it.isSuccessful){//성공
-                            Log.d("googleLogin", "success")
+        val account    = result.signInAccount
+        val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
 
-                            val currentUser = mFirebaseAuth.currentUser
-                            onRegister(currentUser.uid, currentUser.email)
-                            DM.getInstance().startActivity(this, PictureActivity())
-                            finish()
-                        }
-                    }
+        mFirebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                if (!it.isSuccessful) return@addOnCompleteListener//성공
+                val currentUser = mFirebaseAuth.currentUser
+                //첫 로그인(회원가입)일 때는 정보 DB 입력
+                if (it.result!!.additionalUserInfo.isNewUser) {
+                    Log.d("googleLogin", "user register")
+                    onRegister(
+                        currentUser.uid,
+                        currentUser.email,
+                        currentUser.displayName,
+                        DM.getInstance().getNow()
+                    )
+                }
+                Log.d("googleLogin", "user login")
+                //이미 가입한사람이 로그인하면 마지막 접속일 업데이트
+                onLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
             }
-        }
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
 
     }
 
-    //버전 체크
-    private fun onRegister(user_id: String, user_email: String){
+    //회원가입
+    private fun onRegister(user_id: String, user_email: String, user_name: String, user_date: String){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "user_register"))
         params.add(MultipartBody.Part.createFormData("user_id", user_id))
         params.add(MultipartBody.Part.createFormData("user_email", user_email))
-        params.add(MultipartBody.Part.createFormData("user_date", DM.getInstance().getNow()))
+        params.add(MultipartBody.Part.createFormData("user_name", user_name))
+        params.add(MultipartBody.Part.createFormData("user_date", user_date))
 
         //HTTP 통신
         DM.getInstance().onHTTP_POST_Connect(this, params, ::onRegisterResult)
     }
 
+    //회원가입 결과
     private fun onRegisterResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
+            if (jsonObject.get("success") == true) onLogin()
 
             Log.d("register_response =>", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
+    }
 
+    //로그인시 마지막 접속일 업데이트
+    private fun onLastDateUpdate(user_id: String, user_lastdate: String){
+        val params = ArrayList<MultipartBody.Part>()
+        params.add(MultipartBody.Part.createFormData("reqcmd", "user_lastdate_update"))
+        params.add(MultipartBody.Part.createFormData("user_id", user_id))
+        params.add(MultipartBody.Part.createFormData("user_lastdate", user_lastdate))
+
+        //HTTP 통신
+        DM.getInstance().onHTTP_POST_Connect(this, params, ::onLastDateUpdateResult)
+    }
+
+    //마지막 접속일 업데이트 결과
+    private fun onLastDateUpdateResult(response: Response<ResponseBody>){
+        //JSON 형태의 문자열 타입
+        try{
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            if (jsonObject.get("success") == true) onLogin()
+
+            Log.d("update_response =>", jsonObject.toString())
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun onLogin(){
+        DM.getInstance().startActivity(this, PictureActivity())
+        finish()
     }
 
 }
