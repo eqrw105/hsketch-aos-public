@@ -25,7 +25,7 @@ open class SettingItemView : ConstraintLayout {
     private fun init(context: Context, attrs: AttributeSet?){
         val v = View.inflate(context, R.layout.layout_settingitemview, this)
         mLayout_Setingitemview_Textview_Title = v.findViewById(R.id.layout_settingitemview_textview_title)
-        mLayout_Setingitemview_Imageview = v.findViewById(R.id.layout_settingitemview_imageview)
+        mLayout_Setingitemview_Imageview      = v.findViewById(R.id.layout_settingitemview_imageview)
         val typeArray = context.theme.obtainStyledAttributes(attrs, R.styleable.settingItemViewData, 0, 0)
 
         try {

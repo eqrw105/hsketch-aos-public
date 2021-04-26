@@ -94,9 +94,9 @@ class PictureActivity : AppCompatActivity() {
 
         onDrawing()
         onSelectTopMenu()
-        onReceivePicture1FromServer()
-        onReceivePicture2FromServer()
-        onReceivePicture3FromServer()
+        onHttpPicture1FromServer()
+        onHttpPicture2FromServer()
+        onHttpPicture3FromServer()
     }
 
     private fun onDrawing(){
@@ -120,67 +120,68 @@ class PictureActivity : AppCompatActivity() {
     }
 
     //좋아요수 순서
-    private fun onReceivePicture1FromServer(){
+    private fun onHttpPicture1FromServer(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_1"))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReceivePicture1FromServerResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpPicture1FromServerResult)
     }
 
-    private fun onReceivePicture1FromServerResult(response: Response<ResponseBody>){
+    private fun onHttpPicture1FromServerResult(response: Response<ResponseBody>){
         onUpdatePicture(response, mPictureList_1, mPictureAdapter_1)
     }
 
     //신규작품순서
-    private fun onReceivePicture2FromServer(){
+    private fun onHttpPicture2FromServer(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_2"))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReceivePicture2FromServerResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpPicture2FromServerResult)
     }
 
-    private fun onReceivePicture2FromServerResult(response: Response<ResponseBody>){
+    private fun onHttpPicture2FromServerResult(response: Response<ResponseBody>){
         onUpdatePicture(response, mPictureList_2, mPictureAdapter_2)
     }
 
     //신규작품순서
-    private fun onReceivePicture3FromServer(){
+    private fun onHttpPicture3FromServer(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_3"))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReceivePicture3FromServerResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpPicture3FromServerResult)
     }
 
-    private fun onReceivePicture3FromServerResult(response: Response<ResponseBody>){
+    private fun onHttpPicture3FromServerResult(response: Response<ResponseBody>){
         onUpdatePicture(response, mPictureList_3, mPictureAdapter_3)
     }
 
+    //각각 조건별로 가져온 작품들을 UI에 적용
     private fun onUpdatePicture(response: Response<ResponseBody>, arrayList: ArrayList<PictureData>, adapter: PictuerAdapter){
         try{
             //JSON 형태의 문자열 타입
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            val success                = jsonObject.get("success")
-            val items                  = jsonObject.get("items").toString()
-            if(success == false) return
+            val success                = jsonObject.getBoolean("success")
+            val items                  = jsonObject.getString("items")
+            if(!success) return
             val jsonArray              = JSONArray(items)
 
             for (i in 0 until jsonArray.length()){
                 val item         = jsonArray.getJSONObject(i)
-                val picture_id         = item.get("picture_id")   .toString().toInt()
-                val picture_user       = item.get("picture_user") .toString()
-                val picture_title      = item.get("picture_title").toString()
-                val picture_like       = item.get("picture_like") .toString().toInt()
+                val picture_id         = item.getInt("picture_id")
+                val picture_user       = item.getString("picture_user")
+                val picture_title      = item.getString("picture_title")
+                val picture_like       = item.getInt("picture_like")
                 val pictureData        = PictureData(picture_id, picture_user, picture_title, picture_like)
 
                 arrayList.add(pictureData)
                 adapter  .notifyItemInserted(arrayList.size-1)
 
-                Log.d("picture_response", jsonObject.toString())
             }
+            Log.d("picture_response", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -202,7 +203,7 @@ class PictureActivity : AppCompatActivity() {
             val uri  = Uri.parse(BuildConfig.BASE_URL + BuildConfig.BASE_PATH + item.getPictureUser() +"/" + item.getPictureTitle() + DM.mFileExtension)
 
             holder.mLayout_Main_Picture_Textview_Title.text = item.getPictureTitle()
-            holder.mLayout_Main_Picture_Textview_Like.text = DM.getInstance().compressInt(context, item.getPictureLike())
+            holder.mLayout_Main_Picture_Textview_Like.text  = DM.getInstance().compressInt(context, item.getPictureLike())
 
             Picasso.get().load(uri).into(holder.mLayout_Main_Picture_Imageview)
 
@@ -217,11 +218,11 @@ class PictureActivity : AppCompatActivity() {
             }
         }
 
-        open inner class Holder(itemview: View?) : RecyclerView.ViewHolder(itemview!!) {
-            var mLayout_Main_Picture_Imageview      = itemview!!.findViewById<ImageView>(R.id.layout_main_picture_imageview)
-            var mLayout_Main_Picture_Cardview       = itemview!!.findViewById<CardView>(R.id.layout_main_picture_cardview)
-            var mLayout_Main_Picture_Textview_Like  = itemview!!.findViewById<TextView>(R.id.layout_main_picture_textview_like)
-            var mLayout_Main_Picture_Textview_Title = itemview!!.findViewById<TextView>(R.id.layout_main_picture_textview_title)
+        open inner class Holder(itemview: View) : RecyclerView.ViewHolder(itemview) {
+            var mLayout_Main_Picture_Imageview      = itemview.findViewById<ImageView>(R.id.layout_main_picture_imageview)
+            var mLayout_Main_Picture_Cardview       = itemview.findViewById<CardView>(R.id.layout_main_picture_cardview)
+            var mLayout_Main_Picture_Textview_Like  = itemview.findViewById<TextView>(R.id.layout_main_picture_textview_like)
+            var mLayout_Main_Picture_Textview_Title = itemview.findViewById<TextView>(R.id.layout_main_picture_textview_title)
         }
     }
 

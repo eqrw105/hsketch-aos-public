@@ -44,14 +44,19 @@ class DM {
         private var mInstance                   : DM?       = null
 
         open var mIntentkey_PictureId                       = "picture_id"
+        open var mIntentkey_NoticeId                        = "notice_id"
         open var mIntentkey_Web                             = "web"
         open var mIntentKey_Privacy                         = "privacy"
         open var mIntentKey_Termsofservice                  = "termsofservice"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
-        open val mPictureStatusAgree                        = 1
         open val mPictureStatusCheking                      = 0
+        open val mPictureStatusAgree                        = 1
         open val mPictureStatusUnagree                      = 2
+        open val mNoticeImportanceNormal                    = 0
+        open val mNoticeImportanceImportant                 = 1
+        open val mNoticeImportanceUrgent                    = 2
+
 
         open fun getInstance(): DM{
             if(mInstance == null) mInstance                 = DM()
@@ -205,7 +210,7 @@ class DM {
     }
 
     // HTTP 통신 성공 후 리턴값을 매개변수로 UI 적용 메서드 호출
-    open fun onHTTP_POST_Connect(context: Context, params: ArrayList<MultipartBody.Part>, method: ((response: Response<ResponseBody>) -> Unit)?){
+    open fun HTTP_POST_CONNECT(context: Context, params: ArrayList<MultipartBody.Part>, method: ((response: Response<ResponseBody>) -> Unit)?){
         if(!getInternetCheck(context)) return
         val retrofit           = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL).build()
         val retrofit_interface = retrofit.create(retrofit_interface::class.java)

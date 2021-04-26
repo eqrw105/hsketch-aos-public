@@ -13,7 +13,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Version        : SettingItemView
     private lateinit var mSetting_Settingitemview_Shared         : SettingItemView
     private lateinit var mSetting_Settingitemview_Mypicture      : SettingItemView
-    private lateinit var mSetting_Settingitemview_Privacy         : SettingItemView
+    private lateinit var mSetting_Settingitemview_Privacy        : SettingItemView
     private lateinit var mSetting_Settingitemview_Termsofservice : SettingItemView
     private lateinit var mSetting_Settingitemview_Inquiry        : SettingItemView
     private lateinit var mSetting_Settingitemview_Logout         : SettingItemView
@@ -30,7 +30,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         mSetting_Settingitemview_Version        = findViewById(R.id.setting_settingitemview_version)
         mSetting_Settingitemview_Shared         = findViewById(R.id.setting_settingitemview_shared)
         mSetting_Settingitemview_Mypicture      = findViewById(R.id.setting_settingitemview_mypicture)
-        mSetting_Settingitemview_Privacy         = findViewById(R.id.setting_settingitemview_privacy)
+        mSetting_Settingitemview_Privacy        = findViewById(R.id.setting_settingitemview_privacy)
         mSetting_Settingitemview_Termsofservice = findViewById(R.id.setting_settingitemview_termsofservice)
         mSetting_Settingitemview_Inquiry        = findViewById(R.id.setting_settingitemview_inquiry)
         mSetting_Settingitemview_Logout         = findViewById(R.id.setting_settingitemview_logout)

@@ -48,4 +48,8 @@
 
     <color name="picture_favorite">#FF3333</color>
 
+    <color name="datePprimary">#c9c9c9</color>
+
+    <color name="notice_importance">#FF3333</color>
+
 </resources>

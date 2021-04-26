@@ -59,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onSearch(){
         mSearch_Searchview.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                onSearchPicture(p0!!)
+                onHttpSearch(p0!!)
                 return true
             }
 
@@ -81,16 +81,16 @@ class SearchActivity : AppCompatActivity() {
         DM.getInstance().finishActivity(this)
     }
 
-    private fun onSearchPicture(search_keyword: String){
+    private fun onHttpSearch(search_keyword: String){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_search"))
         params.add(MultipartBody.Part.createFormData("search_keyword", search_keyword))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onSearchPictureResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpSearchResult)
     }
 
-    private fun onSearchPictureResult(response: Response<ResponseBody>){
+    private fun onHttpSearchResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             mSearchList.clear()
@@ -98,9 +98,9 @@ class SearchActivity : AppCompatActivity() {
 
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            val success                = jsonObject.get("success")
-            val items                  = jsonObject.get("items").toString()
-            if(success == false){
+            val success                = jsonObject.getBoolean("success")
+            val items                  = jsonObject.getString("items")
+            if(!success){
                 return
             }
             val jsonArray              = JSONArray(items)
@@ -109,11 +109,11 @@ class SearchActivity : AppCompatActivity() {
 
             for (i in 0 until jsonArray.length()){
                 val item          = jsonArray.getJSONObject(i)
-                val picture_id          = item.get("picture_id").toString().toInt()
-                val picture_user        = item.get("picture_user").toString()
-                val picture_title       = item.get("picture_title").toString()
-                val picture_description = item.get("picture_description").toString()
-                val picture_like        = item.get("picture_like").toString().toInt()
+                val picture_id          = item.getInt("picture_id")
+                val picture_user        = item.getString("picture_user")
+                val picture_title       = item.getString("picture_title")
+                val picture_description = item.getString("picture_description")
+                val picture_like        = item.getInt("picture_like")
                 val pictureData = SearchData(
                     picture_id,
                     picture_user,
@@ -124,8 +124,8 @@ class SearchActivity : AppCompatActivity() {
                 mSearchList.add(pictureData)
                 mSearchAdapter.notifyItemInserted(mSearchList.size-1)
 
-                Log.d("search_response =>", jsonObject.toString())
             }
+            Log.d("search_response =>", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -161,12 +161,12 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
-        inner class Holder(itemview: View?) : RecyclerView.ViewHolder(itemview!!) {
-            open var mLayout_Search_Picture_Constraintlayout     = itemview!!.findViewById<ConstraintLayout>(R.id.layout_search_picture_constraintlayout)
-            open var mLayout_Search_Picture_Textview_Title       = itemview!!.findViewById<TextView>(R.id.layout_search_picture_textview_title)
-            open var mLayout_Search_Picture_Textview_Description = itemview!!.findViewById<TextView>(R.id.layout_search_picture_textview_description)
-            open var mLayout_Search_Picture_Textview_Like        = itemview!!.findViewById<TextView>(R.id.layout_search_picture_textview_like)
-            open var mLayout_Search_Picture_Imageview            = itemview!!.findViewById<ImageView>(R.id.layout_search_picture_imageview)
+        inner class Holder(itemview: View) : RecyclerView.ViewHolder(itemview) {
+            open var mLayout_Search_Picture_Constraintlayout     = itemview.findViewById<ConstraintLayout>(R.id.layout_search_picture_constraintlayout)
+            open var mLayout_Search_Picture_Textview_Title       = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_title)
+            open var mLayout_Search_Picture_Textview_Description = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_description)
+            open var mLayout_Search_Picture_Textview_Like        = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_like)
+            open var mLayout_Search_Picture_Imageview            = itemview.findViewById<ImageView>(R.id.layout_search_picture_imageview)
 
         }
 

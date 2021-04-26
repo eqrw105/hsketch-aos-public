@@ -15,13 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Response
 
 class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedListener {
-    private lateinit var mFirebaseAuth: FirebaseAuth
-    private lateinit var mGoogleApiClient: GoogleApiClient
+    private lateinit var mFirebaseAuth              : FirebaseAuth
+    private lateinit var mGoogleApiClient           : GoogleApiClient
     private lateinit var mIntro_Sigininbutton_Google: SignInButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,27 +43,27 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
             .build()
 
-        onAppVersion()
+        onHttpAppVersion()
         onRegister()
     }
 
     //버전 체크
-    private fun onAppVersion(){
+    private fun onHttpAppVersion(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "config_version"))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onAppVersionResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpAppVersionResult)
     }
 
-    private fun onAppVersionResult(response: Response<ResponseBody>){
+    private fun onHttpAppVersionResult(response: Response<ResponseBody>){
         try{
             //JSON 형태의 문자열 타입
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject     = JSONObject(responseStringFromJson)
-            val success        = jsonObject.get("success")
-            if(success == false) return
-            val config_version = jsonObject.get("config_version").toString()
+            val success        = jsonObject.getBoolean("success")
+            if(!success) return
+            val config_version = jsonObject.getString("config_version")
             val currentUser    = mFirebaseAuth.currentUser
 
             Log.d("version => ", jsonObject.toString())
@@ -82,7 +81,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 return
             }
             //마지막 접속일 업데이트
-            onLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
+            onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -116,7 +115,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 //첫 로그인(회원가입)일 때는 정보 DB 입력
                 if (it.result!!.additionalUserInfo.isNewUser) {
                     Log.d("googleLogin", "user register")
-                    onRegister(
+                    onHttpRegister(
                         currentUser.uid,
                         currentUser.email,
                         currentUser.displayName,
@@ -126,7 +125,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 }
                 Log.d("googleLogin", "user login")
                 //이미 가입한사람이 로그인하면 마지막 접속일 업데이트
-                onLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
+                onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
             }
     }
 
@@ -135,7 +134,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     //회원가입
-    private fun onRegister(user_id: String, user_email: String, user_name: String, user_date: String){
+    private fun onHttpRegister(user_id: String, user_email: String, user_name: String, user_date: String){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "user_register"))
         params.add(MultipartBody.Part.createFormData("user_id", user_id))
@@ -144,16 +143,17 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         params.add(MultipartBody.Part.createFormData("user_date", user_date))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onRegisterResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpRegisterResult)
     }
 
     //회원가입 결과
-    private fun onRegisterResult(response: Response<ResponseBody>){
+    private fun onHttpRegisterResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            if (jsonObject.get("success") == true) onLogin()
+            val success                = jsonObject.getBoolean("success")
+            if (success) onLogin()
 
             Log.d("register_response =>", jsonObject.toString())
         }catch (e: Exception){
@@ -162,23 +162,24 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     //로그인시 마지막 접속일 업데이트
-    private fun onLastDateUpdate(user_id: String, user_lastdate: String){
+    private fun onHttpLastDateUpdate(user_id: String, user_lastdate: String){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "user_lastdate_update"))
         params.add(MultipartBody.Part.createFormData("user_id", user_id))
         params.add(MultipartBody.Part.createFormData("user_lastdate", user_lastdate))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onLastDateUpdateResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpLastDateUpdateResult)
     }
 
     //마지막 접속일 업데이트 결과
-    private fun onLastDateUpdateResult(response: Response<ResponseBody>){
+    private fun onHttpLastDateUpdateResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            if (jsonObject.get("success") == true) onLogin()
+            val success                = jsonObject.getBoolean("success")
+            if (success) onLogin()
 
             Log.d("update_response =>", jsonObject.toString())
         }catch (e: Exception){

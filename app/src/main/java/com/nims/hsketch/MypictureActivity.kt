@@ -95,7 +95,7 @@ class MypictureActivity : AppCompatActivity() {
 
         mFirebaseAuth                                   = FirebaseAuth.getInstance()
 
-        onReceiveMyPicture()
+        onHttpMyPicture()
         onActivityFinish()
     }
 
@@ -110,32 +110,32 @@ class MypictureActivity : AppCompatActivity() {
         }
     }
 
-    private fun onReceiveMyPicture(){
+    private fun onHttpMyPicture(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "my_picture_download"))
         params.add(MultipartBody.Part.createFormData("user_id", mFirebaseAuth.currentUser.uid))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReceiveMyPictureResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpMyPictureResult)
     }
 
-    private fun onReceiveMyPictureResult(response: Response<ResponseBody>){
+    private fun onHttpMyPictureResult(response: Response<ResponseBody>){
         try{
             //JSON 형태의 문자열 타입
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            val success                = jsonObject.get("success")
-            val items                  = jsonObject.get("items").toString()
-            if(success == false) return
+            val success                = jsonObject.getBoolean("success")
+            val items                  = jsonObject.getString("items")
+            if(!success) return
             val jsonArray              = JSONArray(items)
             for (i in 0 until jsonArray.length()){
                 val item         = jsonArray.getJSONObject(i)
 
-                val picture_id        = item.get("picture_id")   .toString().toInt()
-                val picture_user      = item.get("picture_user") .toString()
-                val picture_title     = item.get("picture_title").toString()
-                val picture_like      = item.get("picture_like") .toString().toInt()
-                val picture_agree     = item.get("picture_agree").toString().toInt()
+                val picture_id        = item.getInt("picture_id")
+                val picture_user      = item.getString("picture_user")
+                val picture_title     = item.getString("picture_title")
+                val picture_like      = item.getInt("picture_like")
+                val picture_agree     = item.getInt("picture_agree")
                 val pictureData       = MypictureData(
                     picture_id,
                     picture_user,
@@ -166,8 +166,8 @@ class MypictureActivity : AppCompatActivity() {
                 if(mMypictureList_Checking.isNotEmpty()) mMypicture_Constraintlaouy_Checking.visibility = View.VISIBLE
                 if(mMypictureList_Unagree .isNotEmpty()) mMypicture_Constraintlaouy_Unagree.visibility  = View.VISIBLE
 
-                Log.d("mypicture_response => ", jsonObject.toString())
             }
+            Log.d("mypicture_response => ", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -239,7 +239,7 @@ class MypictureActivity : AppCompatActivity() {
             params.add(MultipartBody.Part.createFormData("user_id", user_id))
 
             //HTTP 통신
-            DM.getInstance().onHTTP_POST_Connect(activity, params, null)
+            DM.getInstance().HTTP_POST_CONNECT(activity, params, null)
 
             if(itemCount>1) {
                 arrayList.removeAt(position)
@@ -251,11 +251,11 @@ class MypictureActivity : AppCompatActivity() {
             }
         }
 
-        open inner class Holder(itemview: View?) : RecyclerView.ViewHolder(itemview!!) {
-            var mLayout_Mypicture_Picture_Imageview      = itemview!!.findViewById<ImageView>(R.id.layout_mypicture_picture_imageview)
-            var mLayout_Mypicture_Picture_Cardview       = itemview!!.findViewById<CardView>(R.id.layout_mypicture_picture_cardview)
-            var mLayout_Mypicture_Picture_Textview_Like  = itemview!!.findViewById<TextView>(R.id.layout_mypicture_picture_textview_like)
-            var mLayout_Mypicture_Picture_Textview_Title = itemview!!.findViewById<TextView>(R.id.layout_mypicture_picture_textview_title)
+        open inner class Holder(itemview: View) : RecyclerView.ViewHolder(itemview) {
+            var mLayout_Mypicture_Picture_Imageview      = itemview.findViewById<ImageView>(R.id.layout_mypicture_picture_imageview)
+            var mLayout_Mypicture_Picture_Cardview       = itemview.findViewById<CardView>(R.id.layout_mypicture_picture_cardview)
+            var mLayout_Mypicture_Picture_Textview_Like  = itemview.findViewById<TextView>(R.id.layout_mypicture_picture_textview_like)
+            var mLayout_Mypicture_Picture_Textview_Title = itemview.findViewById<TextView>(R.id.layout_mypicture_picture_textview_title)
         }
     }
 

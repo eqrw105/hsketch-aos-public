@@ -50,7 +50,7 @@ class PictureDetailActivity : AppCompatActivity() {
         mFirebaseAuth                        = FirebaseAuth.getInstance()
         mPicture_Id                          = intent.getIntExtra(DM.mIntentkey_PictureId, -1).toString()
         mPicture_Like                        = 0
-        onPictureDetail()
+        onHttpPictureDetail()
         onActivityFinish()
         onFavorite()
         onMenu()
@@ -58,7 +58,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
     private fun onFavorite(){
         mPicture_Detail_Imageview_Favorite.setOnClickListener {
-            onFavoritePicture()
+            onHttpFavoritePicture()
         }
     }
 
@@ -96,11 +96,11 @@ class PictureDetailActivity : AppCompatActivity() {
         val user_id = mFirebaseAuth.currentUser.uid
         when(item.itemId){
             R.id.picture_detail_menu_report -> {
-                onReportPicture()
+                onHttpReportPicture()
             }
             R.id.picture_detail_menu_remove -> {
                 if(user_id == mPicture_UserId) {
-                    onRemovePicture()
+                    onHttpRemovePicture()
                 }else{
                     DM.getInstance().showToast(this, getString(R.string.picture_remove_user_not_admin))
                 }
@@ -110,38 +110,38 @@ class PictureDetailActivity : AppCompatActivity() {
     }
 
     //그림 상세정보
-    private fun onPictureDetail(){
+    private fun onHttpPictureDetail(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_detail"))
         params.add(MultipartBody.Part.createFormData("picture_id", mPicture_Id))
         params.add(MultipartBody.Part.createFormData("user_id", mFirebaseAuth.currentUser.uid))
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onPictureDetailResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpPictureDetailResult)
     }
 
-    private fun onPictureDetailResult(response: Response<ResponseBody>){
+    private fun onHttpPictureDetailResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
-            val success                = jsonObject.get("success")
-            if(success == false){
+            val success                = jsonObject.getBoolean("success")
+            if(!success){
                 DM.getInstance().showToast(this, getString(R.string.picture_detail_result_null))
                 finish()
                 return
             }
 
-            val picture_title       = jsonObject.get("picture_title")      .toString()
-            val picture_description = jsonObject.get("picture_description").toString()
-            val picture_user_email  = jsonObject.get("picture_user_email") .toString()
-            val picture_favorite    = jsonObject.get("picture_favorite")
+            val picture_title       = jsonObject.getString("picture_title")
+            val picture_description = jsonObject.getString("picture_description")
+            val picture_user_email  = jsonObject.getString("picture_user_email")
+            val picture_favorite    = jsonObject.getBoolean("picture_favorite")
 
-            mPicture_UserId                           = jsonObject.get("picture_user").toString()
-            mPicture_Like                             = jsonObject.get("picture_like").toString().toInt()
+            mPicture_UserId                           = jsonObject.getString("picture_user")
+            mPicture_Like                             = jsonObject.getInt("picture_like")
             mPicture_Detail_Textview_Title.text       = picture_title
             mPicture_Detail_Textview_Description.text = picture_description
 
-            if(picture_favorite == true){
+            if(picture_favorite){
                 val compress_pictureLike = DM.getInstance().compressInt(this, --mPicture_Like)
                 setLike(compress_pictureLike)
             }else{
@@ -160,7 +160,7 @@ class PictureDetailActivity : AppCompatActivity() {
     }
 
     //삭제하기
-    private fun onRemovePicture(){
+    private fun onHttpRemovePicture(){
         val picture_path = BuildConfig.BASE_PATH + mPicture_UserId +"/" + mPicture_Detail_Textview_Title.text + DM.mFileExtension
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_remove"))
@@ -169,16 +169,16 @@ class PictureDetailActivity : AppCompatActivity() {
         params.add(MultipartBody.Part.createFormData("user_id", mPicture_UserId))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onRemovePictureResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpRemovePictureResult)
     }
 
-    private fun onRemovePictureResult(response: Response<ResponseBody>){
+    private fun onHttpRemovePictureResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson  = response.body()!!.string() as String
             val jsonObject              = JSONObject(responseStringFromJson)
-            val success                 = jsonObject.get("success")
-            if(success == false) return
+            val success                 = jsonObject.getBoolean("success")
+            if(!success) return
 
             DM.getInstance().showToast(this, getString(R.string.picture_remove_success))
             finish()
@@ -190,7 +190,7 @@ class PictureDetailActivity : AppCompatActivity() {
     }
 
     //신고하기
-    private fun onReportPicture(){
+    private fun onHttpReportPicture(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_report"))
         params.add(MultipartBody.Part.createFormData("picture_id", mPicture_Id))
@@ -198,16 +198,16 @@ class PictureDetailActivity : AppCompatActivity() {
         params.add(MultipartBody.Part.createFormData("report_date", DM.getInstance().getNow()))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onReportPictureResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpReportPictureResult)
     }
 
-    private fun onReportPictureResult(response: Response<ResponseBody>){
+    private fun onHttpReportPictureResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson  = response.body()!!.string() as String
             val jsonObject              = JSONObject(responseStringFromJson)
-            val success                 = jsonObject.get("success")
-            if(success == false) return
+            val success                 = jsonObject.getBoolean("success")
+            if(!success) return
             DM.getInstance().showToast(this, getString(R.string.picture_report_success))
 
         }catch (e: Exception){
@@ -216,24 +216,24 @@ class PictureDetailActivity : AppCompatActivity() {
     }
 
     //좋아요 기능
-    private fun onFavoritePicture(){
+    private fun onHttpFavoritePicture(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_favorite"))
         params.add(MultipartBody.Part.createFormData("picture_id", mPicture_Id))
         params.add(MultipartBody.Part.createFormData("user_id", mFirebaseAuth.currentUser.uid))
 
         //HTTP 통신
-        DM.getInstance().onHTTP_POST_Connect(this, params, ::onFavoritePictureResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpFavoritePictureResult)
     }
 
-    private fun onFavoritePictureResult(response: Response<ResponseBody>){
+    private fun onHttpFavoritePictureResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson  = response.body()!!.string() as String
             val jsonObject              = JSONObject(responseStringFromJson)
-            val favorite_state          = jsonObject.get("favorite_state")
+            val favorite_state          = jsonObject.getBoolean("favorite_state")
             val picture_like            = DM.getInstance().compressInt(this, mPicture_Like)
-            if(favorite_state == true) {
+            if(favorite_state) {
                 setLike(picture_like)
             }else{
                 setUnLike(picture_like)

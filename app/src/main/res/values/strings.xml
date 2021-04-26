@@ -51,4 +51,8 @@
     <string name="internet_not_connected">인터넷 연결을 확인하세요</string>
     <string name="blank">공백을 채워주세요</string>
     <string name="favorite_status_true_text">회원님 외</string>
+    <string name="notice_detail_result_null">존재하지 않는 공지사항 입니다</string>
+    <string name="notice_importance_normal">일반공지</string>
+    <string name="notice_importance_important">중요공지</string>
+    <string name="notice_importance_ungent">긴급공지</string>
 </resources>

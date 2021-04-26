@@ -64,7 +64,7 @@ class BottomSheetDrawingUpload(
         onActivityFinish()
         saveImageToGallery()
         onShareImage()
-        onSendImageToServer()
+        onHttpImageSend()
 
     }
 
@@ -99,7 +99,7 @@ class BottomSheetDrawingUpload(
         }
     }
 
-    private fun onSendImageToServer(){
+    private fun onHttpImageSend(){
         mDrawing_Upload_Button.setOnClickListener {
             val pictureTitle       = mDrawing_Upload_Edittext_Title.text.toString()
             val pictureDescription = mDrawing_Upload_Edittext_Description.text.toString()
@@ -123,17 +123,18 @@ class BottomSheetDrawingUpload(
             params.add(MultipartBody.Part.createFormData("picture_date", DM.getInstance().getNow()))
 
             //HTTP 통신
-            DM.getInstance().onHTTP_POST_Connect(activity!!, params, this::onSendImageToServerResult)
+            DM.getInstance().HTTP_POST_CONNECT(activity!!, params, this::onHttpImageSendResult)
         }
     }
 
-    private fun onSendImageToServerResult(response: Response<ResponseBody>) {
+    private fun onHttpImageSendResult(response: Response<ResponseBody>) {
         try {
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject = JSONObject(responseStringFromJson)
             Log.d("response =>", jsonObject.toString())
             //올리려는 파일명이 이미 있으면 중복이라 알리고 멈춤
-            if (jsonObject.get("isFile") == true) {
+            val isFile = jsonObject.getBoolean("isFile")
+            if (isFile) {
                 DM.getInstance().showToast(activity!!, activity!!.getString(R.string.drawing_upload_isfile))
                 return
             }
