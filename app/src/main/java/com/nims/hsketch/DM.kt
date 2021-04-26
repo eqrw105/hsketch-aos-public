@@ -13,7 +13,9 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
@@ -207,6 +209,12 @@ class DM {
         }
         showToast(context, context.getString(R.string.internet_not_connected))
         return false
+    }
+
+    open fun setKeybordHide(context: Context, view: View){
+        //키보드 내리기
+        val imm = context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     // HTTP 통신 성공 후 리턴값을 매개변수로 UI 적용 메서드 호출

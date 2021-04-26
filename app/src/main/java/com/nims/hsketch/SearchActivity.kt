@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,8 @@ import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var mSearch_Imageview_Back : ImageView
@@ -53,17 +56,19 @@ class SearchActivity : AppCompatActivity() {
         mSearchRecyclerview.setHasFixedSize(true)
 
         onActivityFinish()
-        onSearch()
+        onHttpSearch()
     }
 
     private fun onSearch(){
         mSearch_Searchview.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                onHttpSearch(p0!!)
+                DM.getInstance().setKeybordHide(this@SearchActivity, mSearch_Searchview)
                 return true
             }
 
             override fun onQueryTextChange(p0: String?): Boolean {
+                mSearchAdapter.setFilter(p0!!)
+                Log.d("ttt","change")
                 return true
             }
 
@@ -81,10 +86,9 @@ class SearchActivity : AppCompatActivity() {
         DM.getInstance().finishActivity(this)
     }
 
-    private fun onHttpSearch(search_keyword: String){
+    private fun onHttpSearch(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "picture_download_search"))
-        params.add(MultipartBody.Part.createFormData("search_keyword", search_keyword))
 
         //HTTP 통신
         DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpSearchResult)
@@ -125,6 +129,7 @@ class SearchActivity : AppCompatActivity() {
                 mSearchAdapter.notifyItemInserted(mSearchList.size-1)
 
             }
+            onSearch()
             Log.d("search_response =>", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
@@ -134,8 +139,12 @@ class SearchActivity : AppCompatActivity() {
 
     class SearchAdapter(private val context: Context, private val arrayList: ArrayList<SearchData>,private val activity: Activity) :
         RecyclerView.Adapter<SearchAdapter.Holder>() {
+        //리스트 원본
+        private lateinit var mArrayListSave: ArrayList<SearchData>
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
             val view = LayoutInflater.from(context).inflate(R.layout.layout_search_picture, parent, false)
+            mArrayListSave = ArrayList(arrayList)
             return Holder(view)
         }
 
@@ -161,16 +170,33 @@ class SearchActivity : AppCompatActivity() {
 
         }
 
+        open fun setFilter(charText: String) {
+            val charText = charText.toLowerCase(Locale.getDefault())
+            arrayList.clear()
+            if (charText.isBlank()) {
+                arrayList.addAll(mArrayListSave)
+                notifyDataSetChanged()
+                return
+            }
+            if (mArrayListSave.isEmpty()) return
+            for (item in mArrayListSave) {
+                val title       = item.getPictureTitle()
+                val description = item.getPictureDescription()
+                if (title.toLowerCase().contains(charText) ||
+                    description.toLowerCase().contains(charText)) {
+                    arrayList.add(item)
+                }
+            }
+            notifyDataSetChanged()
+        }
+
         inner class Holder(itemview: View) : RecyclerView.ViewHolder(itemview) {
             open var mLayout_Search_Picture_Constraintlayout     = itemview.findViewById<ConstraintLayout>(R.id.layout_search_picture_constraintlayout)
             open var mLayout_Search_Picture_Textview_Title       = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_title)
             open var mLayout_Search_Picture_Textview_Description = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_description)
             open var mLayout_Search_Picture_Textview_Like        = itemview.findViewById<TextView>(R.id.layout_search_picture_textview_like)
             open var mLayout_Search_Picture_Imageview            = itemview.findViewById<ImageView>(R.id.layout_search_picture_imageview)
-
         }
-
-
     }
 
     class SearchData(
