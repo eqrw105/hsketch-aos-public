@@ -36,7 +36,6 @@ import kotlin.collections.ArrayList
 class DM {
     private val mStorageExternalPermissionRequestCode       = 1001
     private val mCompressIntRound                           = "%.1f"
-    private val mStringHideText                             = "*"
     private val mDateFormatType                             = "yyyy-MM-dd HH:mm:ss"
 
 
@@ -50,7 +49,6 @@ class DM {
         open var mIntentKey_Termsofservice                  = "termsofservice"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
-        open val mGoogleEmailType                           = "@gmail.com"
         open val mPictureStatusAgree                        = 1
         open val mPictureStatusCheking                      = 0
         open val mPictureStatusUnagree                      = 2
@@ -59,13 +57,6 @@ class DM {
             if(mInstance == null) mInstance                 = DM()
             return mInstance!!
         }
-    }
-
-    open fun stringToHide(string: String): String{
-        //이메일 형태 변경 abcde@gmail.com => ab***@gmail.com
-        var newString = string.substring(0, string.length/2)
-        for(i in string.length/2 until string.length) newString += mStringHideText
-        return newString
     }
 
     open fun compressInt(context: Context, value: Int): String{

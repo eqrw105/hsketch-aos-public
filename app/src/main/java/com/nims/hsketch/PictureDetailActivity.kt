@@ -133,8 +133,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
             val picture_title       = jsonObject.get("picture_title")      .toString()
             val picture_description = jsonObject.get("picture_description").toString()
-            val picture_user_email  = jsonObject.get("picture_user_email") .toString().replace(DM.mGoogleEmailType, "")
-            val picture_uploader    = DM.getInstance().stringToHide(picture_user_email) + DM.mGoogleEmailType
+            val picture_user_email  = jsonObject.get("picture_user_email") .toString()
             val picture_favorite    = jsonObject.get("picture_favorite")
 
             mPicture_UserId                           = jsonObject.get("picture_user").toString()
@@ -152,7 +151,7 @@ class PictureDetailActivity : AppCompatActivity() {
 
             val uri = Uri.parse(BuildConfig.BASE_URL + BuildConfig.BASE_PATH + mPicture_UserId +"/" + picture_title + DM.mFileExtension)
             Picasso.get().load(uri).into(mPicture_Detail_Imageview)
-            TooltipCompat.setTooltipText(mPicture_Detail_Imageview, picture_uploader)
+            TooltipCompat.setTooltipText(mPicture_Detail_Imageview, picture_user_email)
 
             Log.d("detail_response =>", jsonObject.toString())
         }catch (e: Exception){
