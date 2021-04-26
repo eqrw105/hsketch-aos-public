@@ -62,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
     private fun onSearch(){
         mSearch_Searchview.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(p0: String?): Boolean {
-                DM.getInstance().setKeybordHide(this@SearchActivity, mSearch_Searchview)
+                DM.getInstance().setKeyboardHide(this@SearchActivity, mSearch_Searchview)
                 return true
             }
 
