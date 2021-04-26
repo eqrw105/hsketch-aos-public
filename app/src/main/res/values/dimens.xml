@@ -35,4 +35,6 @@
 
     <dimen name="favorite_size">48dp</dimen>
 
+    <dimen name="primary_button_radius">50dp</dimen>
+
 </resources>

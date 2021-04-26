@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="개인정보 처리방침 및 이용약관 동의"
-        android:textAlignment="center"
+        android:gravity="center"
         android:textColor="@color/textPrimary"
         android:textSize="@dimen/textsize_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +35,7 @@
             android:layout_weight="1"
             android:maxLines="1"
             android:ellipsize="end"
+            android:background="@drawable/request_privacy_button_privacy_ripple"
             android:text="개인정보 처리방침"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
@@ -44,6 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/request_privacy_button_tersmofservice_ripple"
             android:text="이용약관"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
@@ -78,7 +80,7 @@
         android:text="개인정보 처리방침"
         android:buttonTint="@color/textPrimary"
         android:textColor="@color/textPrimary"
-        android:textSize="@dimen/textsize_regular"
+        android:textSize="@dimen/textsize_medium"
         app:layout_constraintTop_toBottomOf="@+id/request_privacy_constraintlayout_webview" />
 
 
@@ -90,7 +92,7 @@
         android:text="이용약관"
         android:textColor="@color/textPrimary"
         android:buttonTint="@color/textPrimary"
-        android:textSize="@dimen/textsize_regular"
+        android:textSize="@dimen/textsize_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/request_privacy_checkbox_privacy" />
 
@@ -110,8 +112,10 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="확인"
-            android:textColor="@color/textPrimary"
+            android:background="@drawable/primacy_button_ripple_round"
+            android:text="동의"
+            android:layout_marginEnd="@dimen/margin_regular"
+            android:textColor="@color/textPrimaryDark"
             android:textSize="@dimen/textsize_medium" />
 
         <Button
@@ -121,8 +125,10 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="취소"
-            android:textColor="@color/textPrimary"
+            android:text="비동의"
+            android:layout_marginStart="@dimen/margin_regular"
+            android:background="@drawable/primacy_button_ripple_round"
+            android:textColor="@color/textPrimaryDark"
             android:textSize="@dimen/textsize_medium" />
 
 

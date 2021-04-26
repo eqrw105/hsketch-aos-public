@@ -137,7 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_regular"
-                android:background="@drawable/upload_botton_ripple_round"
+                android:background="@drawable/upload_botton_ripple"
                 android:text="@string/drawing_upload_botton_text"
                 android:textColor="@color/textPrimary"
                 android:textSize="@dimen/textsize_medium"
