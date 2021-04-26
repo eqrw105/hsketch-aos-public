@@ -24,25 +24,16 @@ class WebActivity : AppCompatActivity() {
 
         when(intent.getStringExtra(DM.mIntentkey_Web)){
             DM.mIntentKey_Privacy        -> {
-                onWebView(BuildConfig.BASE_URL + BuildConfig.PRIVACY_END_POINT)
+                val url = BuildConfig.BASE_URL + BuildConfig.PRIVACY_END_POINT
+                DM.getInstance().getWebView(mWeb_Webview, url)
             }
             DM.mIntentKey_Termsofservice -> {
-                onWebView(BuildConfig.BASE_URL + BuildConfig.TERMSOFSERVICE_END_POINT)
+                val url = BuildConfig.BASE_URL + BuildConfig.TERMSOFSERVICE_END_POINT
+                DM.getInstance().getWebView(mWeb_Webview, url)
             }
         }
 
         onActivityFinish()
-    }
-
-    private fun onWebView(url : String) {
-        mWeb_Webview.settings.javaScriptEnabled = true // 자바 스크립트 허용
-
-        // 웹뷰안에 새 창이 뜨지 않도록 방지
-        mWeb_Webview.webViewClient   = WebViewClient()
-        mWeb_Webview.webChromeClient = WebChromeClient()
-
-        mWeb_Webview.loadUrl(url)
-
     }
 
     override fun onBackPressed() {

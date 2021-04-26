@@ -42,7 +42,7 @@ class BottomSheetDrawingUpload(
         container          : ViewGroup?,
         savedInstanceState : Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.bottomsheet_drawing_upload, container, false)
+        val view = inflater.inflate(R.layout.layout_drawing_upload_bottomsheet, container, false)
         init(view)
         return view
     }

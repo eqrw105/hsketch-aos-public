@@ -1,12 +1,16 @@
 package com.nims.hsketch
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
@@ -22,6 +26,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private lateinit var mFirebaseAuth              : FirebaseAuth
     private lateinit var mGoogleApiClient           : GoogleApiClient
     private lateinit var mIntro_Sigininbutton_Google: SignInButton
+    private lateinit var mAccount                   : GoogleSignInAccount
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
@@ -95,7 +100,6 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -104,30 +108,80 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         val result     = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
         if (!result!!.isSuccess) return
 
-        val account    = result.signInAccount
-        val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
+        mAccount    = result.signInAccount!!
 
+        onHttpIsUser(mAccount.email.toString())
+
+    }
+
+    //회원가입 되어있는가
+    private fun onHttpIsUser(user_email: String){
+        val params = ArrayList<MultipartBody.Part>()
+        params.add(MultipartBody.Part.createFormData("reqcmd", "is_user"))
+        params.add(MultipartBody.Part.createFormData("user_email", user_email))
+
+        //HTTP 통신
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpIsUserResult)
+    }
+
+    //회원가입 결과
+    private fun onHttpIsUserResult(response: Response<ResponseBody>){
+        //JSON 형태의 문자열 타입
+        try{
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            val success                = jsonObject.getBoolean("success")
+            //회원이면 로그인
+            if (success) return onLogin()
+            //회원이 아니면 회원가입 시작
+
+            //개인정보 처리방침 물어보기
+            onRequestPrivacy()
+
+
+            Log.d("register_response =>", jsonObject.toString())
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    //개인정보 처리방침 동의
+    private fun onRequestPrivacy(){
+        val dialog = RequestPrivacyDialog(this)
+        dialog.setOnClickedListener { result ->
+            if(result) onGoogleAuthRegister()
+
+        }
+        dialog.showDialog()
+    }
+
+    //Firebase Auth에 아이디 생성성
+    private fun onGoogleAuthRegister(){
+        val credential = GoogleAuthProvider.getCredential(mAccount.idToken, null)
         mFirebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
                 //성공
                 val currentUser = mFirebaseAuth.currentUser
+                //DB 회원정보 입력
+                onHttpRegister(
+                    currentUser.uid,
+                    currentUser.email,
+                    currentUser.displayName,
+                    DM.getInstance().getNow()
+                )
                 //첫 로그인(회원가입)일 때는 정보 DB 입력
-                if (it.result!!.additionalUserInfo.isNewUser) {
-                    Log.d("googleLogin", "user register")
-                    onHttpRegister(
-                        currentUser.uid,
-                        currentUser.email,
-                        currentUser.displayName,
-                        DM.getInstance().getNow()
-                    )
-                    return@addOnCompleteListener
-                }
+//                    if (it.result!!.additionalUserInfo.isNewUser) {
+//                        Log.d("googleLogin", "user register")
+//                        return@addOnCompleteListener
+//                    }
                 Log.d("googleLogin", "user login")
                 //이미 가입한사람이 로그인하면 마지막 접속일 업데이트
                 onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
             }
     }
+
+
 
     override fun onConnectionFailed(p0: ConnectionResult) {
 

@@ -55,4 +55,5 @@
     <string name="notice_importance_normal">일반공지</string>
     <string name="notice_importance_important">중요공지</string>
     <string name="notice_importance_ungent">긴급공지</string>
+    <string name="request_privacy_notcheck">개인정보 처리방침 및 이용약관을 동의하세요</string>
 </resources>

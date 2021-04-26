@@ -14,6 +14,9 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -209,6 +212,14 @@ class DM {
         }
         showToast(context, context.getString(R.string.internet_not_connected))
         return false
+    }
+
+    open fun getWebView(view: WebView, url: String){
+        view.settings.javaScriptEnabled = true // 자바 스크립트 허용
+        // 웹뷰안에 새 창이 뜨지 않도록 방지
+        view.webViewClient   = WebViewClient()
+        view.webChromeClient = WebChromeClient()
+        view.loadUrl(url)
     }
 
     open fun setKeyboardHide(context: Context, view: View){
