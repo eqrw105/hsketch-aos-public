@@ -3,7 +3,7 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="@color/Gray_900">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <solid android:color="@color/request_privacy_button_privacy"/>
+            <solid android:color="@color/request_policy_button_policy"/>
         </shape>
     </item>
 </ripple>

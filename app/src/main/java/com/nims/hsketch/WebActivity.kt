@@ -23,8 +23,8 @@ class WebActivity : AppCompatActivity() {
         mWeb_Imageview_Back = findViewById(R.id.web_imageview_back)
 
         when(intent.getStringExtra(DM.mIntentkey_Web)){
-            DM.mIntentKey_Privacy        -> {
-                val url = BuildConfig.BASE_URL + BuildConfig.PRIVACY_END_POINT
+            DM.mIntentKey_Policy         -> {
+                val url = BuildConfig.BASE_URL + BuildConfig.POLICY_END_POINT
                 DM.getInstance().getWebView(mWeb_Webview, url)
             }
             DM.mIntentKey_Termsofservice -> {
@@ -40,10 +40,9 @@ class WebActivity : AppCompatActivity() {
         //웹사이트에서 뒤로 갈 페이지 존재시
         if(mWeb_Webview.canGoBack()) {
             mWeb_Webview.goBack() // 웹사이트 뒤로가기
+            return
         }
-        else {
-            super.onBackPressed()
-        }
+        super.onBackPressed()
     }
 
     private fun onActivityFinish(){

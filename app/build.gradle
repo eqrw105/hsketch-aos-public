@@ -24,7 +24,7 @@ android {
         buildConfigField "String", "BASE_PATH", keystoreProperties["BASE_PATH"]
         buildConfigField "String", "END_POINT", keystoreProperties["END_POINT"]
         buildConfigField "String", "END_POINT", keystoreProperties["END_POINT"]
-        buildConfigField "String", "PRIVACY_END_POINT", keystoreProperties["PRIVACY_END_POINT"]
+        buildConfigField "String", "POLICY_END_POINT", keystoreProperties["POLICY_END_POINT"]
         buildConfigField "String", "TERMSOFSERVICE_END_POINT", keystoreProperties["TERMSOFSERVICE_END_POINT"]
         buildConfigField "String", "MAIN_IMAGE_PATH", keystoreProperties["MAIN_IMAGE_PATH"]
 

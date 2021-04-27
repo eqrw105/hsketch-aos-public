@@ -13,7 +13,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Version        : SettingItemView
     private lateinit var mSetting_Settingitemview_Shared         : SettingItemView
     private lateinit var mSetting_Settingitemview_Mypicture      : SettingItemView
-    private lateinit var mSetting_Settingitemview_Privacy        : SettingItemView
+    private lateinit var mSetting_Settingitemview_Policy         : SettingItemView
     private lateinit var mSetting_Settingitemview_Termsofservice : SettingItemView
     private lateinit var mSetting_Settingitemview_Inquiry        : SettingItemView
     private lateinit var mSetting_Settingitemview_Logout         : SettingItemView
@@ -30,7 +30,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         mSetting_Settingitemview_Version        = findViewById(R.id.setting_settingitemview_version)
         mSetting_Settingitemview_Shared         = findViewById(R.id.setting_settingitemview_shared)
         mSetting_Settingitemview_Mypicture      = findViewById(R.id.setting_settingitemview_mypicture)
-        mSetting_Settingitemview_Privacy        = findViewById(R.id.setting_settingitemview_privacy)
+        mSetting_Settingitemview_Policy         = findViewById(R.id.setting_settingitemview_policy)
         mSetting_Settingitemview_Termsofservice = findViewById(R.id.setting_settingitemview_termsofservice)
         mSetting_Settingitemview_Inquiry        = findViewById(R.id.setting_settingitemview_inquiry)
         mSetting_Settingitemview_Logout         = findViewById(R.id.setting_settingitemview_logout)
@@ -40,7 +40,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         mSetting_Settingitemview_Version       .setOnClickListener(this)
         mSetting_Settingitemview_Shared        .setOnClickListener(this)
         mSetting_Settingitemview_Mypicture     .setOnClickListener(this)
-        mSetting_Settingitemview_Privacy        .setOnClickListener(this)
+        mSetting_Settingitemview_Policy        .setOnClickListener(this)
         mSetting_Settingitemview_Termsofservice.setOnClickListener(this)
         mSetting_Settingitemview_Inquiry       .setOnClickListener(this)
         mSetting_Settingitemview_Logout        .setOnClickListener(this)
@@ -72,10 +72,10 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
             R.id.setting_settingitemview_mypicture ->{
                 DM.getInstance().startActivity(this, MypictureActivity())
             }
-            R.id.setting_settingitemview_privacy ->{
+            R.id.setting_settingitemview_policy ->{
                 val intent = Intent(this, WebActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                intent.putExtra(DM.mIntentkey_Web, DM.mIntentKey_Privacy)
+                intent.putExtra(DM.mIntentkey_Web, DM.mIntentKey_Policy)
                 DM.getInstance().startActivity(this, intent)
             }
             R.id.setting_settingitemview_termsofservice ->{

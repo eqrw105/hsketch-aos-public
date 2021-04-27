@@ -132,7 +132,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             //회원이 아니면 회원가입 시작
 
             //개인정보 처리방침 물어보기
-            onRequestPrivacy()
+            onRequestPolicy()
 
 
             Log.d("register_response =>", jsonObject.toString())
@@ -142,7 +142,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     }
 
     //개인정보 처리방침 동의
-    private fun onRequestPrivacy(){
+    private fun onRequestPolicy(){
         val dialog = RequestPolicyDialog(this)
         dialog.setOnClickedListener { result ->
             if(result) onGoogleAuthRegister()

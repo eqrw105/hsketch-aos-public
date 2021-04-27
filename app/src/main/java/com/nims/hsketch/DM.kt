@@ -51,7 +51,7 @@ class DM {
         open var mIntentkey_PictureId                       = "picture_id"
         open var mIntentkey_NoticeId                        = "notice_id"
         open var mIntentkey_Web                             = "web"
-        open var mIntentKey_Privacy                         = "privacy"
+        open var mIntentKey_Policy                          = "policy"
         open var mIntentKey_Termsofservice                  = "termsofservice"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
