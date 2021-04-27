@@ -3,11 +3,17 @@ package com.nims.hsketch
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TooltipCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.squareup.picasso.Picasso
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import org.json.JSONObject
+import retrofit2.Response
 
 class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Notice         : SettingItemView
@@ -18,7 +24,9 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Termsofservice : SettingItemView
     private lateinit var mSetting_Settingitemview_Inquiry        : SettingItemView
     private lateinit var mSetting_Settingitemview_Logout         : SettingItemView
+    private lateinit var mSetting_Settingitemview_Leave          : SettingItemView
     private lateinit var mSetting_Imageview_Back                 : ImageView
+    private lateinit var mFirebaseAuth                           : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +43,9 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         mSetting_Settingitemview_Termsofservice = findViewById(R.id.setting_settingitemview_termsofservice)
         mSetting_Settingitemview_Inquiry        = findViewById(R.id.setting_settingitemview_inquiry)
         mSetting_Settingitemview_Logout         = findViewById(R.id.setting_settingitemview_logout)
+        mSetting_Settingitemview_Leave          = findViewById(R.id.setting_settingitemview_leave)
         mSetting_Imageview_Back                 = findViewById(R.id.setting_imageview_back)
+        mFirebaseAuth                           = FirebaseAuth.getInstance()
 
         mSetting_Settingitemview_Notice        .setOnClickListener(this)
         mSetting_Settingitemview_Version       .setOnClickListener(this)
@@ -45,6 +55,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         mSetting_Settingitemview_Termsofservice.setOnClickListener(this)
         mSetting_Settingitemview_Inquiry       .setOnClickListener(this)
         mSetting_Settingitemview_Logout        .setOnClickListener(this)
+        mSetting_Settingitemview_Leave         .setOnClickListener(this)
         mSetting_Imageview_Back                .setOnClickListener(this)
     }
 
@@ -93,7 +104,10 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.setting_settingitemview_logout ->{
-                onLogout()
+                onHttpLogout()
+            }
+            R.id.setting_settingitemview_leave ->{
+                DM.getInstance().startActivity(this, LeaveActivity())
             }
             R.id.setting_imageview_back ->{
                 finish()
@@ -101,17 +115,30 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun onLogout(){
-        val firebaseAuth = FirebaseAuth.getInstance()
-        //로그인시 마지막 접속일 업데이트
+    private fun onHttpLogout(){
         val params = ArrayList<MultipartBody.Part>()
         params.add(MultipartBody.Part.createFormData("reqcmd", "user_logout"))
-        params.add(MultipartBody.Part.createFormData("user_id", firebaseAuth.currentUser.uid))
+        params.add(MultipartBody.Part.createFormData("user_id", mFirebaseAuth.currentUser.uid))
 
         //HTTP 통신
-        DM.getInstance().HTTP_POST_CONNECT(this, params, null)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpLogoutResult)
+    }
 
-      //  firebaseAuth.signOut()
+    private fun onHttpLogoutResult(response: Response<ResponseBody>){
+        //JSON 형태의 문자열 타입
+        try{
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            val success                = jsonObject.getBoolean("success")
+            Log.d("logout_response =>", jsonObject.toString())
+            if(success) onLogout()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun onLogout(){
+        mFirebaseAuth.signOut()
         finishAffinity()
         DM.getInstance().startActivity(this, IntroActivity())
     }

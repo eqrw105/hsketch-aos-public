@@ -52,6 +52,4 @@
 
     <color name="notice_importance">#FF3333</color>
 
-    <color name="request_policy_button_policy">@android:color/holo_red_dark</color>
-    <color name="request_policy_button_termsofservice">@android:color/holo_blue_dark</color>
 </resources>

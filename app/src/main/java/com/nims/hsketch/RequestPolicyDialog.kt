@@ -2,6 +2,7 @@ package com.nims.hsketch
 
 import android.app.Dialog
 import android.content.Context
+import android.os.Bundle
 import android.view.Window
 import android.webkit.WebView
 import android.widget.Button
@@ -16,6 +17,7 @@ class RequestPolicyDialog(context: Context): Dialog(context) {
     private lateinit var mRequest_Policy_Button_Termsofservice   : Button
     private lateinit var mRequest_Policy_Webview                 : WebView
     private lateinit var mRequestPolicyDialogListener            : RequestPolicyDialogListener
+
 
     fun showDialog() {
         init()

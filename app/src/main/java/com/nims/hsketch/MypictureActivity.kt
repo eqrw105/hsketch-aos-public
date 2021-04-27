@@ -222,7 +222,7 @@ class MypictureActivity : AppCompatActivity() {
                     contextMenu!!.getItem(0).setOnMenuItemClickListener {
                         val firebaseAuth = FirebaseAuth.getInstance()
                         val user_id      = firebaseAuth.currentUser.uid
-                        onRemovePicture(item.getMypictureId(), item.getMypictureTitle(), user_id, position)
+                        onHttpRemovePicture(item.getMypictureId(), item.getMypictureTitle(), user_id, position)
 
                         return@setOnMenuItemClickListener true
                     }
@@ -230,7 +230,7 @@ class MypictureActivity : AppCompatActivity() {
             })
         }
 
-        private fun onRemovePicture(picture_id: Int, picture_title: String, user_id: String, position: Int){
+        private fun onHttpRemovePicture(picture_id: Int, picture_title: String, user_id: String, position: Int){
             val picture_path = BuildConfig.BASE_PATH + user_id +"/" + picture_title + DM.mFileExtension
             val params = ArrayList<MultipartBody.Part>()
             params.add(MultipartBody.Part.createFormData("reqcmd", "picture_remove"))

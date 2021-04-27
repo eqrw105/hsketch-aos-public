@@ -76,8 +76,15 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 //버전 미일치
                 return
             }
-            //로그인했던 유저인가
-            onHttpIsLogin(currentUser.uid)
+
+            //로그인 기록없으면 로그인버튼 보여줌
+            if(currentUser == null){
+                showLoginButton()
+            }
+            else {
+                //기록있으면 로그인
+                onPopupGoogleLogin()
+            }
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -85,8 +92,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     private fun onRegister(){
         mIntro_Sigininbutton_Google.setOnClickListener {
-            val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
-            startActivityForResult(intent, DM.mGoogleSignRequestCode)
+           onPopupGoogleLogin()
         }
     }
 
@@ -101,36 +107,6 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         mAccount    = result.signInAccount!!
 
         onHttpIsRegister(mAccount.email.toString())
-    }
-
-    //로그인 되어있는가
-    private fun onHttpIsLogin(user_id: String){
-        val params = ArrayList<MultipartBody.Part>()
-        params.add(MultipartBody.Part.createFormData("reqcmd", "is_login"))
-        params.add(MultipartBody.Part.createFormData("user_id", user_id))
-
-        //HTTP 통신
-        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpIsLoginResult)
-    }
-
-    //로그인 되어있는지 결과
-    private fun onHttpIsLoginResult(response: Response<ResponseBody>){
-        //JSON 형태의 문자열 타입
-        try{
-            val responseStringFromJson = response.body()!!.string() as String
-            val jsonObject             = JSONObject(responseStringFromJson)
-            Log.d("islogin_response =>", jsonObject.toString())
-            val success                = jsonObject.getBoolean("success")
-            //로그인 중 인가?
-            if (success) {
-                //맞으면 자동로그인
-                onHttpLastDateUpdate(mFirebaseAuth.currentUser.uid, DM.getInstance().getNow())
-            }
-            //아니면 로그인 하는 버튼 보여줌
-            else showLoginButton()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
     }
 
     //회원가입 되어있는가
@@ -152,9 +128,8 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             val success                = jsonObject.getBoolean("success")
             //회원이면 로그인
             if (success) {
-                val user_id            = jsonObject.getString("user_id")
-                //마지막 접속일 업데이트 및 로그인
-                onHttpLastDateUpdate(user_id, DM.getInstance().getNow())
+                //로그인
+                onGoogleAuthRegister()
             }
             //아니면 개인정보 처리방침 동의받기
             else onRequestPolicy()
@@ -168,7 +143,9 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private fun onRequestPolicy(){
         val dialog = RequestPolicyDialog(this)
         dialog.setOnClickedListener { result ->
-            if(result) onGoogleAuthRegister()
+            if(result) {
+                onGoogleAuthRegister()
+            }
         }
         dialog.showDialog()
     }
@@ -181,18 +158,18 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 if (!it.isSuccessful) return@addOnCompleteListener
                 //성공
                 val currentUser = it.result!!.user
-                //DB 회원정보 입력
-                onHttpRegister(
-                    currentUser.uid,
-                    currentUser.email,
-                    currentUser.displayName,
-                    DM.getInstance().getNow()
-                )
-                //첫 로그인(회원가입)일 때는 정보 DB 입력
-//                    if (it.result!!.additionalUserInfo.isNewUser) {
-//                        Log.d("googleLogin", "user register")
-//                        return@addOnCompleteListener
-//                    }
+                //신규유저만 DB 회원정보 입력
+                if(it!!.result!!.additionalUserInfo.isNewUser) {
+                    onHttpRegister(
+                        currentUser.uid,
+                        currentUser.email,
+                        currentUser.displayName,
+                        DM.getInstance().getNow()
+                    )
+                    return@addOnCompleteListener
+                }
+                //기존유저는 마지막접속일 업데이트후 로그인
+                onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
                 Log.d("googleLogin", "user login")
             }
     }
@@ -269,6 +246,11 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private fun onLogin(){
         DM.getInstance().startActivity(this, PictureActivity())
         finish()
+    }
+
+    private fun onPopupGoogleLogin(){
+        val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
+        startActivityForResult(intent, DM.mGoogleSignRequestCode)
     }
 
 }

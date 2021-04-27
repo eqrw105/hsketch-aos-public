@@ -35,7 +35,6 @@
             android:layout_weight="1"
             android:maxLines="1"
             android:ellipsize="end"
-            android:background="@drawable/request_policy_button_policy_ripple"
             android:text="@string/setting_policy"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
@@ -45,7 +44,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/request_policy_button_tersmofservice_ripple"
             android:text="@string/setting_termsofservice"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
@@ -112,10 +110,9 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:background="@drawable/primacy_button_ripple_round"
             android:text="@string/request_policy_agree"
             android:layout_marginEnd="@dimen/margin_regular"
-            android:textColor="@color/textPrimaryDark"
+            android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_medium" />
 
         <Button
@@ -127,8 +124,7 @@
             android:maxLines="1"
             android:text="@string/request_policy_unagree"
             android:layout_marginStart="@dimen/margin_regular"
-            android:background="@drawable/primacy_button_ripple_round"
-            android:textColor="@color/textPrimaryDark"
+            android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_medium" />
 
 
