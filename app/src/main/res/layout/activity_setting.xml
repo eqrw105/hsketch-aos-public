@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_medium"
                 app:itemDrawable="@drawable/baseline_description_white_24"
-                app:itemTitleText="@string/setting_pollicy" />
+                app:itemTitleText="@string/setting_policy" />
 
             <com.nims.hsketch.SettingItemView
                 android:id="@+id/setting_settingitemview_termsofservice"
@@ -98,6 +98,13 @@
                 android:layout_height="wrap_content"
                 app:itemDrawable="@drawable/baseline_logout_white_24"
                 app:itemTitleText="@string/setting_logout" />
+
+            <com.nims.hsketch.SettingItemView
+                android:id="@+id/setting_settingitemview_leave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:itemDrawable="@drawable/baseline_logout_white_24"
+                app:itemTitleText="@string/setting_leave" />
 
 
         </LinearLayout>

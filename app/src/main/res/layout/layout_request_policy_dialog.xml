@@ -7,10 +7,10 @@
     android:padding="@dimen/padding_medium">
 
     <TextView
-        android:id="@+id/request_privacy_textview_title"
+        android:id="@+id/request_policy_textview_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="개인정보 처리방침 및 이용약관 동의"
+        android:text="@string/request_policy_title"
         android:gravity="center"
         android:textColor="@color/textPrimary"
         android:textSize="@dimen/textsize_large"
@@ -26,27 +26,27 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/request_privacy_textview_title">
+        app:layout_constraintTop_toBottomOf="@+id/request_policy_textview_title">
 
         <Button
-            android:id="@+id/request_privacy_button_privacy"
+            android:id="@+id/request_policy_button_policy"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:maxLines="1"
             android:ellipsize="end"
-            android:background="@drawable/request_privacy_button_privacy_ripple"
-            android:text="개인정보 처리방침"
+            android:background="@drawable/request_policy_button_policy_ripple"
+            android:text="@string/setting_policy"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
 
         <Button
-            android:id="@+id/request_privacy_button_termsofservice"
+            android:id="@+id/request_policy_button_termsofservice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/request_privacy_button_tersmofservice_ripple"
-            android:text="이용약관"
+            android:background="@drawable/request_policy_button_tersmofservice_ripple"
+            android:text="@string/setting_termsofservice"
             android:textColor="@color/textPrimary"
             android:textSize="@dimen/textsize_regular" />
 
@@ -54,7 +54,7 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/request_privacy_constraintlayout_webview"
+        android:id="@+id/request_policy_constraintlayout_webview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_medium"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <WebView
-            android:id="@+id/request_privacy_webView"
+            android:id="@+id/request_policy_webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,28 +73,28 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <CheckBox
-        android:id="@+id/request_privacy_checkbox_privacy"
+        android:id="@+id/request_policy_checkbox_policy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
-        android:text="개인정보 처리방침"
+        android:text="@string/setting_policy"
         android:buttonTint="@color/textPrimary"
         android:textColor="@color/textPrimary"
         android:textSize="@dimen/textsize_medium"
-        app:layout_constraintTop_toBottomOf="@+id/request_privacy_constraintlayout_webview" />
+        app:layout_constraintTop_toBottomOf="@+id/request_policy_constraintlayout_webview" />
 
 
     <CheckBox
-        android:id="@+id/request_privacy_checkbox_termsofservice"
+        android:id="@+id/request_policy_checkbox_termsofservice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_medium"
-        android:text="이용약관"
+        android:text="@string/setting_termsofservice"
         android:textColor="@color/textPrimary"
         android:buttonTint="@color/textPrimary"
         android:textSize="@dimen/textsize_medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/request_privacy_checkbox_privacy" />
+        app:layout_constraintTop_toBottomOf="@+id/request_policy_checkbox_policy" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -103,29 +103,29 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/request_privacy_checkbox_termsofservice">
+        app:layout_constraintTop_toBottomOf="@+id/request_policy_checkbox_termsofservice">
 
         <Button
-            android:id="@+id/request_privacy_button_ok"
+            android:id="@+id/request_policy_button_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
             android:background="@drawable/primacy_button_ripple_round"
-            android:text="동의"
+            android:text="@string/request_policy_agree"
             android:layout_marginEnd="@dimen/margin_regular"
             android:textColor="@color/textPrimaryDark"
             android:textSize="@dimen/textsize_medium" />
 
         <Button
-            android:id="@+id/request_privacy_button_cancel"
+            android:id="@+id/request_policy_button_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="비동의"
+            android:text="@string/request_policy_unagree"
             android:layout_marginStart="@dimen/margin_regular"
             android:background="@drawable/primacy_button_ripple_round"
             android:textColor="@color/textPrimaryDark"

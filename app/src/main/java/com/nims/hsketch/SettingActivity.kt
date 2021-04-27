@@ -85,10 +85,10 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
                 DM.getInstance().startActivity(this, intent)
             }
             R.id.setting_settingitemview_inquiry ->{
+                DM.getInstance().showToast(this, getString(R.string.admin_email))
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "plain/text"
                 intent.putExtra(Intent.EXTRA_EMAIL, getString(R.string.admin_email))
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.admin_email))
                 startActivity(intent)
             }
             R.id.setting_settingitemview_logout ->{

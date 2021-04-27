@@ -1,13 +1,10 @@
 package com.nims.hsketch
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -94,7 +91,6 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     private fun onRegister(){
         mIntro_Sigininbutton_Google.setOnClickListener {
-            if(!DM.getInstance().getInternetCheck(this)) return@setOnClickListener
             val intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient)
             startActivityForResult(intent, DM.mGoogleSignRequestCode)
         }
@@ -147,7 +143,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
     //개인정보 처리방침 동의
     private fun onRequestPrivacy(){
-        val dialog = RequestPrivacyDialog(this)
+        val dialog = RequestPolicyDialog(this)
         dialog.setOnClickedListener { result ->
             if(result) onGoogleAuthRegister()
 
