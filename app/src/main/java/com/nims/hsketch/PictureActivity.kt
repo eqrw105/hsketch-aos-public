@@ -165,8 +165,8 @@ class PictureActivity : AppCompatActivity() {
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
             val success                = jsonObject.getBoolean("success")
-            val items                  = jsonObject.getString("items")
             if(!success) return
+            val items                  = jsonObject.getString("items")
             val jsonArray              = JSONArray(items)
 
             for (i in 0 until jsonArray.length()){

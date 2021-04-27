@@ -12,7 +12,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -33,7 +35,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private fun init(){
         mIntro_Sigininbutton_Google = findViewById(R.id.intro_sigininbutton_google)
 
-        mFirebaseAuth               = FirebaseAuth.getInstance()
+        mFirebaseAuth = FirebaseAuth.getInstance()
 
         val googleSignInOptions     = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -74,16 +76,8 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
                 //버전 미일치
                 return
             }
-            //이미 로그인중인가?
-            if(currentUser == null){
-                //아니면 로그인하는 버튼 보여주기
-                val animation                          = AnimationUtils.loadAnimation(this, R.anim.activity_slide_in)
-                mIntro_Sigininbutton_Google.visibility = View.VISIBLE
-                mIntro_Sigininbutton_Google.animation  = animation
-                return
-            }
-            //마지막 접속일 업데이트
-            onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
+            //로그인했던 유저인가
+            onHttpIsLogin(currentUser.uid)
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -106,36 +100,65 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 
         mAccount    = result.signInAccount!!
 
-        onHttpIsUser(mAccount.email.toString())
+        onHttpIsRegister(mAccount.email.toString())
+    }
 
+    //로그인 되어있는가
+    private fun onHttpIsLogin(user_id: String){
+        val params = ArrayList<MultipartBody.Part>()
+        params.add(MultipartBody.Part.createFormData("reqcmd", "is_login"))
+        params.add(MultipartBody.Part.createFormData("user_id", user_id))
+
+        //HTTP 통신
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpIsLoginResult)
+    }
+
+    //로그인 되어있는지 결과
+    private fun onHttpIsLoginResult(response: Response<ResponseBody>){
+        //JSON 형태의 문자열 타입
+        try{
+            val responseStringFromJson = response.body()!!.string() as String
+            val jsonObject             = JSONObject(responseStringFromJson)
+            Log.d("islogin_response =>", jsonObject.toString())
+            val success                = jsonObject.getBoolean("success")
+            //로그인 중 인가?
+            if (success) {
+                //맞으면 자동로그인
+                onHttpLastDateUpdate(mFirebaseAuth.currentUser.uid, DM.getInstance().getNow())
+            }
+            //아니면 로그인 하는 버튼 보여줌
+            else showLoginButton()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
     }
 
     //회원가입 되어있는가
-    private fun onHttpIsUser(user_email: String){
+    private fun onHttpIsRegister(user_email: String){
         val params = ArrayList<MultipartBody.Part>()
-        params.add(MultipartBody.Part.createFormData("reqcmd", "is_user"))
+        params.add(MultipartBody.Part.createFormData("reqcmd", "is_register"))
         params.add(MultipartBody.Part.createFormData("user_email", user_email))
 
         //HTTP 통신
-        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpIsUserResult)
+        DM.getInstance().HTTP_POST_CONNECT(this, params, ::onHttpIsRegisterResult)
     }
 
-    //회원가입 결과
-    private fun onHttpIsUserResult(response: Response<ResponseBody>){
+    //회원가입 되어있는지 결과
+    private fun onHttpIsRegisterResult(response: Response<ResponseBody>){
         //JSON 형태의 문자열 타입
         try{
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
             val success                = jsonObject.getBoolean("success")
             //회원이면 로그인
-            if (success) return onLogin()
-            //회원이 아니면 회원가입 시작
-
-            //개인정보 처리방침 물어보기
-            onRequestPolicy()
-
-
-            Log.d("register_response =>", jsonObject.toString())
+            if (success) {
+                val user_id            = jsonObject.getString("user_id")
+                //마지막 접속일 업데이트 및 로그인
+                onHttpLastDateUpdate(user_id, DM.getInstance().getNow())
+            }
+            //아니면 개인정보 처리방침 동의받기
+            else onRequestPolicy()
+            Log.d("isuser_response =>", jsonObject.toString())
         }catch (e: Exception){
             e.printStackTrace()
         }
@@ -146,7 +169,6 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         val dialog = RequestPolicyDialog(this)
         dialog.setOnClickedListener { result ->
             if(result) onGoogleAuthRegister()
-
         }
         dialog.showDialog()
     }
@@ -158,7 +180,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             .addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener
                 //성공
-                val currentUser = mFirebaseAuth.currentUser
+                val currentUser = it.result!!.user
                 //DB 회원정보 입력
                 onHttpRegister(
                     currentUser.uid,
@@ -172,8 +194,6 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
 //                        return@addOnCompleteListener
 //                    }
                 Log.d("googleLogin", "user login")
-                //이미 가입한사람이 로그인하면 마지막 접속일 업데이트
-                onHttpLastDateUpdate(currentUser.uid, DM.getInstance().getNow())
             }
     }
 
@@ -203,7 +223,10 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             val responseStringFromJson = response.body()!!.string() as String
             val jsonObject             = JSONObject(responseStringFromJson)
             val success                = jsonObject.getBoolean("success")
-            if (success) onLogin()
+            if (success) {
+                val user_id            = jsonObject.getString("user_id")
+                onHttpLastDateUpdate(user_id, DM.getInstance().getNow())
+            }
 
             Log.d("register_response =>", jsonObject.toString())
         }catch (e: Exception){
@@ -235,6 +258,12 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         }catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+    private fun showLoginButton(){
+        val animation                          = AnimationUtils.loadAnimation(this, R.anim.activity_slide_in)
+        mIntro_Sigininbutton_Google.visibility = View.VISIBLE
+        mIntro_Sigininbutton_Google.animation  = animation
     }
 
     private fun onLogin(){

@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import okhttp3.MultipartBody
 
 class SettingActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var mSetting_Settingitemview_Notice         : SettingItemView
@@ -92,13 +93,26 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
             R.id.setting_settingitemview_logout ->{
-                FirebaseAuth.getInstance().signOut()
-                finishAffinity()
-                DM.getInstance().startActivity(this, IntroActivity())
+                onLogout()
             }
             R.id.setting_imageview_back ->{
                 finish()
             }
         }
+    }
+
+    private fun onLogout(){
+        val firebaseAuth = FirebaseAuth.getInstance()
+        //로그인시 마지막 접속일 업데이트
+        val params = ArrayList<MultipartBody.Part>()
+        params.add(MultipartBody.Part.createFormData("reqcmd", "user_logout"))
+        params.add(MultipartBody.Part.createFormData("user_id", firebaseAuth.currentUser.uid))
+
+        //HTTP 통신
+        DM.getInstance().HTTP_POST_CONNECT(this, params, null)
+
+      //  firebaseAuth.signOut()
+        finishAffinity()
+        DM.getInstance().startActivity(this, IntroActivity())
     }
 }
