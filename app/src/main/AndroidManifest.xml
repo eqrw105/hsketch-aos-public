@@ -8,10 +8,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_hksetch"
+        android:roundIcon="@mipmap/ic_hksetch_round"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LeaveActivity"></activity>
@@ -29,7 +29,7 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".PictureDetailActivity" />
-        <activity android:name=".DrawingActivity" />
+        <activity android:name=".DrawingActivity" android:screenOrientation="portrait"/>
         <activity android:name=".PictureActivity" />
     </application>
 
