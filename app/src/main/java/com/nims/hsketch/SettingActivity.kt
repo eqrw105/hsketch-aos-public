@@ -82,7 +82,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener,
                 DM.getInstance().showToast(this, BuildConfig.VERSION_NAME)
             }
             R.id.setting_settingitemview_shared ->{
-                val message = getString(R.string.app_name) + " 같이할 사람!"
+                val message = getString(R.string.app_name) + getString(R.string.app_share_text) + BuildConfig.PLAYSTORE_PATH
                 val intent = Intent(Intent.ACTION_SEND)
                 intent.type = "text/plain"
                 intent.putExtra(Intent.EXTRA_TEXT, message)
