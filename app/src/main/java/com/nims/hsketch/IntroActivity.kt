@@ -1,6 +1,7 @@
 package com.nims.hsketch
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -73,7 +74,11 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
             Log.d("version => ", jsonObject.toString())
             //버전 일치하면 다음 엑티비티
             if(BuildConfig.VERSION_NAME != config_version) {
-                //버전 미일치
+                //버전 미일치 업데이트하러 이동
+                DM.getInstance().showToast(this, getString(R.string.version_update))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PLAYSTORE_PATH))
+                startActivity(intent)
+                finish()
                 return
             }
 

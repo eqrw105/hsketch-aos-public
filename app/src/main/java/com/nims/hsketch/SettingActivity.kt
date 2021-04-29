@@ -8,14 +8,23 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInApi
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.squareup.picasso.Picasso
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Response
 
-class SettingActivity : AppCompatActivity(), View.OnClickListener {
+class SettingActivity : AppCompatActivity(), View.OnClickListener,
+    GoogleApiClient.OnConnectionFailedListener {
     private lateinit var mSetting_Settingitemview_Notice         : SettingItemView
     private lateinit var mSetting_Settingitemview_Version        : SettingItemView
     private lateinit var mSetting_Settingitemview_Shared         : SettingItemView
@@ -138,8 +147,35 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun onLogout(){
-        mFirebaseAuth.signOut()
-        finishAffinity()
-        DM.getInstance().startActivity(this, IntroActivity())
+
+        val googleSignInOptions     = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleApiClient            = GoogleApiClient.Builder(this)
+            .enableAutoManage(this, this)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+            .build()
+
+        //로그아웃하고 재로그인하면 다시 계정선택하도록 기록완전 삭제
+        googleApiClient.registerConnectionCallbacks(object : GoogleApiClient.ConnectionCallbacks{
+            override fun onConnected(p0: Bundle?) {
+                if(googleApiClient.isConnected){
+                    Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback { status ->
+                        if(status.isSuccess){
+                            Auth.GoogleSignInApi.signOut(googleApiClient)
+                            mFirebaseAuth.signOut()
+                            finishAffinity()
+                            DM.getInstance().startActivity(this@SettingActivity, IntroActivity())
+                        }
+                    }
+                }
+            }
+            override fun onConnectionSuspended(p0: Int) {}
+        })
+
     }
+
+    override fun onConnectionFailed(p0: ConnectionResult) {}
 }
