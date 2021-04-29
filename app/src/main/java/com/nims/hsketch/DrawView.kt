@@ -131,6 +131,7 @@ class DrawView: View {
                 }
             }
             MotionEvent.ACTION_UP ->{
+                mDrawPath     .lineTo(mX, mY)
                 mDrawCanvas   .drawPath(mDrawPath, mDrawPaint)
                 mUndoList     .add(mDrawPath)
                 mUndoPaintList.add(mDrawPaint)
