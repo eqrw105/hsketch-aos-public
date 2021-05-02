@@ -73,7 +73,7 @@ class DM {
         val arr = arrayOf(
             context.resources.getInteger(R.integer.compress_int_unit_1) .toFloat(),
             context.resources.getInteger(R.integer.compress_int_unit_2)     .toFloat(),
-            context.resources.getInteger(R.integer.compress_int_unit_3)       .toFloat()
+            context.resources.getInteger(R.integer.compress_int_unit_3)      .toFloat()
         )
         val round = mCompressIntRound
         if(value >= arr[0]){

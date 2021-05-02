@@ -20,6 +20,11 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        //광고
+        resValue "string", "ADMOB_APP_ID", keystoreProperties['ADMOB_APP_ID']
+        resValue "string", "ADMOB_BANNER_ID", keystoreProperties['ADMOB_BANNER_ID']
+        buildConfigField "String", "ADMOB_OPENING_ID", keystoreProperties["ADMOB_OPENING_ID"]
+
         buildConfigField "String", "BASE_URL", keystoreProperties["BASE_URL"]
         buildConfigField "String", "BASE_PATH", keystoreProperties["BASE_PATH"]
         buildConfigField "String", "END_POINT", keystoreProperties["END_POINT"]
@@ -74,6 +79,14 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
 
-    implementation 'com.aghajari.rlottie:AXrLottie:1.1.0'
+    implementation 'com.google.android.gms:play-services-ads:20.1.0'
+
+
+    // 라이프사이클
+    implementation 'androidx.lifecycle:lifecycle-runtime:2.3.1'
+    // 애플리케이션 프로세스 라이프사이클 추적용 라이브러리
+    implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
+    // 라이프사이클 추적용 어노테이션을 처리
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.3.1'
 
 }

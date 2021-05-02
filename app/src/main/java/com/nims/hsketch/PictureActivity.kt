@@ -15,6 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.ads.mediation.admob.AdMobAdapter
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_picture.*
@@ -45,12 +49,13 @@ class PictureActivity : AppCompatActivity() {
 
     private lateinit var mPicture_Imageview_Mainimage   : ImageView
 
+    private lateinit var mPicture_Adview                : AdView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)
         init()
-
 
     }
 
@@ -61,6 +66,7 @@ class PictureActivity : AppCompatActivity() {
         mPicture_Recyclerview_2               = findViewById(R.id.picture_recyclerview_2)
         mPicture_Recyclerview_3               = findViewById(R.id.picture_recyclerview_3)
         mPicture_Imageview_Mainimage          = findViewById(R.id.picture_imageview_mainimage)
+        mPicture_Adview                       = findViewById(R.id.picture_adview)
 
         mPictureList_1                        = ArrayList()
         mPictureList_2                        = ArrayList()
@@ -92,11 +98,19 @@ class PictureActivity : AppCompatActivity() {
 
         Picasso.get().load(BuildConfig.BASE_URL + BuildConfig.MAIN_IMAGE_PATH).into(mPicture_Imageview_Mainimage)
 
+        getAdmob()
         onDrawing()
         onSelectTopMenu()
         onHttpPicture1FromServer()
         onHttpPicture2FromServer()
         onHttpPicture3FromServer()
+    }
+
+    private fun getAdmob(){
+        //배너
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        mPicture_Adview.loadAd(adRequest)
     }
 
     private fun onDrawing(){

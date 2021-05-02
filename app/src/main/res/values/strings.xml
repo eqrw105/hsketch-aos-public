@@ -6,9 +6,6 @@
     <string name="picture_title1">최고 평가 작품</string>
     <string name="picture_title2">신규 작품</string>
     <string name="picture_title3">추천 작품</string>
-    <string name="picture_category1">카테고리 1 ▼</string>
-    <string name="picture_category2">카테고리 2</string>
-    <string name="picture_category3">카테고리 3</string>
     <string name="picture_ratio">3:4</string>
     <string name="picture_vertical_ratio">5:2</string>
     <string name="picture_mainimage_ratio">16:9</string>
@@ -27,8 +24,8 @@
     <string name="picture_upload_success">업로드 완료, 관리자의 승인 후 반영됩니다</string>
     <string name="picture_upload_failed">업로드 실패</string>
     <string name="http_connect_failed">서버와의 연결을 할 수 없습니다</string>
-    <string name="compress_int_unit_1">십억</string>
-    <string name="compress_int_unit_2">백만</string>
+    <string name="compress_int_unit_1">억</string>
+    <string name="compress_int_unit_2">만</string>
     <string name="compress_int_unit_3">천</string>
     <string name="search_result_null">일치하는 결과가 없습니다</string>
     <string name="admin_email">eqrw105@naver.com</string>
