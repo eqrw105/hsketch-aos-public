@@ -2,7 +2,13 @@
 <resources>
     <declare-styleable name="settingItemViewData">
         <attr name="itemTitleText" format="reference|string" />
-    <!--    <attr name="itemTitleTextColor" format="reference|color" /> -->
+        <!--    <attr name="itemTitleTextColor" format="reference|color" /> -->
         <attr name="itemDrawable" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="storeItemViewData">
+        <attr name="storeTitle" format="reference|string" />
+        <attr name="storePrice" format="reference|string" />
+        <attr name="storeDescription" format="reference|string" />
     </declare-styleable>
 </resources>

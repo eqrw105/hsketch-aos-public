@@ -15,8 +15,8 @@ android {
         applicationId "com.nims.hsketch"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -83,10 +83,15 @@ dependencies {
 
 
     // 라이프사이클
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.3.1'
+    implementation "androidx.lifecycle:lifecycle-runtime:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     // 애플리케이션 프로세스 라이프사이클 추적용 라이브러리
     implementation 'androidx.lifecycle:lifecycle-process:2.3.1'
     // 라이프사이클 추적용 어노테이션을 처리
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.3.1'
+
+    //인앱결제
+    implementation "com.android.billingclient:billing:3.0.3"
+    implementation "com.android.billingclient:billing-ktx:3.0.3"
 
 }

@@ -34,6 +34,8 @@ class AdOpenManager(adApplication: AdApplication): LifecycleObserver, ActivityLi
     }
 
     private fun showAdIfAvailable(){
+        val remove_admob_status = PreferencesManager().getBoolean(mAdApplication.applicationContext, "remove_admob_status")
+        if(remove_admob_status) return
         if (!mIsShowingAd && isAdAvailable()) {
             Log.d(TAG, "Will show ad.");
 

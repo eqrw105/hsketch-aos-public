@@ -5,25 +5,25 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-
-
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <application
+        android:name=".AdApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_hksetch"
-        android:roundIcon="@mipmap/ic_hksetch_round"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_hksetch_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true"
-        android:name=".AdApplication">
+        android:theme="@style/AppTheme">
+        <activity android:name=".StoreActivity"></activity>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/ADMOB_APP_ID"/>
+            android:value="@string/ADMOB_APP_ID" />
 
-        <activity android:name=".LeaveActivity"></activity>
+        <activity android:name=".LeaveActivity" />
         <activity android:name=".NoticeDetailActivity" />
         <activity android:name=".WebActivity" />
         <activity android:name=".NoticeActivity" />
@@ -38,7 +38,9 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".PictureDetailActivity" />
-        <activity android:name=".DrawingActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".DrawingActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".PictureActivity" />
     </application>
 

@@ -48,11 +48,14 @@ class DM {
 
         private var mInstance                   : DM?       = null
 
-        open var mIntentkey_PictureId                       = "picture_id"
-        open var mIntentkey_NoticeId                        = "notice_id"
-        open var mIntentkey_Web                             = "web"
-        open var mIntentKey_Policy                          = "policy"
-        open var mIntentKey_Termsofservice                  = "termsofservice"
+        open val mIntentkey_PictureId                       = "picture_id"
+        open val mIntentkey_NoticeId                        = "notice_id"
+        open val mIntentkey_Web                             = "web"
+        open val mIntentKey_Policy                          = "policy"
+        open val mIntentKey_Termsofservice                  = "termsofservice"
+        open val mPreferencesKeyRemoveAdmob                 = "remove_admob_status"
+        open val mStoreItemIdRemoveAdmob                    = "admob_remove"
+        open val mStoreItemIdDonateToDev                    = "donate_to_developer"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
         open val mPictureStatusCheking                      = 0

@@ -107,6 +107,8 @@ class PictureActivity : AppCompatActivity() {
     }
 
     private fun getAdmob(){
+        val remove_admob_status = PreferencesManager().getBoolean(this, "remove_admob_status")
+        if(remove_admob_status) return
         //배너
         MobileAds.initialize(this)
         val adRequest = AdRequest.Builder().build()

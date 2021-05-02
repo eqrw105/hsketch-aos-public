@@ -52,4 +52,6 @@
 
     <color name="notice_importance">#FF3333</color>
 
+    <color name="store_item_background">@color/Gray_900</color>
+
 </resources>

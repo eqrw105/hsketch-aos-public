@@ -8,6 +8,10 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PurchasesUpdatedListener
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInApi
@@ -29,6 +33,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener,
     private lateinit var mSetting_Settingitemview_Version        : SettingItemView
     private lateinit var mSetting_Settingitemview_Shared         : SettingItemView
     private lateinit var mSetting_Settingitemview_Mypicture      : SettingItemView
+    private lateinit var mSetting_Settingitemview_Store          : SettingItemView
     private lateinit var mSetting_Settingitemview_Policy         : SettingItemView
     private lateinit var mSetting_Settingitemview_Termsofservice : SettingItemView
     private lateinit var mSetting_Settingitemview_Inquiry        : SettingItemView
@@ -48,6 +53,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener,
         mSetting_Settingitemview_Version        = findViewById(R.id.setting_settingitemview_version)
         mSetting_Settingitemview_Shared         = findViewById(R.id.setting_settingitemview_shared)
         mSetting_Settingitemview_Mypicture      = findViewById(R.id.setting_settingitemview_mypicture)
+        mSetting_Settingitemview_Store          = findViewById(R.id.setting_settingitemview_store)
         mSetting_Settingitemview_Policy         = findViewById(R.id.setting_settingitemview_policy)
         mSetting_Settingitemview_Termsofservice = findViewById(R.id.setting_settingitemview_termsofservice)
         mSetting_Settingitemview_Inquiry        = findViewById(R.id.setting_settingitemview_inquiry)
@@ -60,6 +66,7 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener,
         mSetting_Settingitemview_Version       .setOnClickListener(this)
         mSetting_Settingitemview_Shared        .setOnClickListener(this)
         mSetting_Settingitemview_Mypicture     .setOnClickListener(this)
+        mSetting_Settingitemview_Store         .setOnClickListener(this)
         mSetting_Settingitemview_Policy        .setOnClickListener(this)
         mSetting_Settingitemview_Termsofservice.setOnClickListener(this)
         mSetting_Settingitemview_Inquiry       .setOnClickListener(this)
@@ -92,6 +99,9 @@ class SettingActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.setting_settingitemview_mypicture ->{
                 DM.getInstance().startActivity(this, MypictureActivity())
+            }
+            R.id.setting_settingitemview_store ->{
+                DM.getInstance().startActivity(this, StoreActivity())
             }
             R.id.setting_settingitemview_policy ->{
                 val intent = Intent(this, WebActivity::class.java)
