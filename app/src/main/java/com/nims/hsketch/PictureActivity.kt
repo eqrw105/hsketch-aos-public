@@ -127,6 +127,11 @@ class PictureActivity : AppCompatActivity() {
                 R.id.action_search ->{
                     DM.getInstance().startActivity(this, SearchActivity())
                 }
+                R.id.action_refresh ->{
+                    onHttpPicture1FromServer()
+                    onHttpPicture2FromServer()
+                    onHttpPicture3FromServer()
+                }
                 R.id.action_setting ->{
                     DM.getInstance().startActivity(this, SettingActivity())
                 }
@@ -182,6 +187,8 @@ class PictureActivity : AppCompatActivity() {
             val jsonObject             = JSONObject(responseStringFromJson)
             val success                = jsonObject.getBoolean("success")
             if(!success) return
+            arrayList.clear()
+            adapter.notifyDataSetChanged()
             val items                  = jsonObject.getString("items")
             val jsonArray              = JSONArray(items)
 

@@ -17,11 +17,13 @@
         android:roundIcon="@mipmap/ic_hksetch_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StoreActivity"></activity>
+
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/ADMOB_APP_ID" />
+
+        <activity android:name=".StoreActivity" />
 
         <activity android:name=".LeaveActivity" />
         <activity android:name=".NoticeDetailActivity" />

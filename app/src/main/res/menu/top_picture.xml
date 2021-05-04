@@ -8,6 +8,11 @@
         app:showAsAction="always"
         android:title="" />
 
+    <item android:id="@+id/action_refresh"
+        android:icon="@drawable/baseline_restart_alt_white_36"
+        app:showAsAction="always"
+        android:title="" />
+
     <item android:id="@+id/action_setting"
         android:icon="@drawable/baseline_settings_white_36"
         app:showAsAction="always"
