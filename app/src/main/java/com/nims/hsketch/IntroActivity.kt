@@ -26,7 +26,7 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
     private lateinit var mFirebaseAuth              : FirebaseAuth
     private lateinit var mGoogleApiClient           : GoogleApiClient
     private lateinit var mIntro_Sigininbutton_Google: SignInButton
-    private lateinit var mAccount                   : GoogleSignInAccount
+    //private lateinit var mAccount                   : GoogleSignInAccount
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
@@ -109,11 +109,14 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         val result     = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
         if (!result!!.isSuccess) return
 
-        mAccount    = result.signInAccount!!
+        //mAccount    = result.signInAccount!!
+        val account = result.signInAccount
+        onGoogleAuthRegister(account!!)
 
-        onHttpIsRegister(mAccount.email.toString())
+        //onHttpIsRegister(mAccount.email.toString())
     }
 
+    /*
     //회원가입 되어있는가
     private fun onHttpIsRegister(user_email: String){
         val params = ArrayList<MultipartBody.Part>()
@@ -144,6 +147,8 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         }
     }
 
+
+
     //개인정보 처리방침 동의
     private fun onRequestPolicy(){
         val dialog = RequestPolicyDialog(this)
@@ -154,10 +159,10 @@ class IntroActivity : AppCompatActivity(), GoogleApiClient.OnConnectionFailedLis
         }
         dialog.showDialog()
     }
-
+*/
     //Firebase Auth에 아이디 생성성
-    private fun onGoogleAuthRegister(){
-        val credential = GoogleAuthProvider.getCredential(mAccount.idToken, null)
+    private fun onGoogleAuthRegister(account: GoogleSignInAccount){
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         mFirebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener {
                 if (!it.isSuccessful) return@addOnCompleteListener

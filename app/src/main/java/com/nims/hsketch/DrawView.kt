@@ -24,13 +24,15 @@ class DrawView: View {
         init()
     }
 
-    private val mPenSizeInitailize  = 1f
-    private val mPenAlphaInitailize = 255
+    private val mAlphaUnit          = 2.25f
+
+    private val mPenSizeInitailize  = resources.getInteger(R.integer.draw_stroke_size_min).toFloat()
+    private val mPenAlphaInitailize = (resources.getInteger(R.integer.draw_stroke_ahlpa_max) * mAlphaUnit).toInt()
     private val mPenColorInitailize = Color.BLACK
 
     private var mPenColor           = 0
-    private var mPenSize            = 1f
-    private var mPenAlpha           = 255
+    private var mPenSize            = resources.getInteger(R.integer.draw_stroke_size_min).toFloat()
+    private var mPenAlpha           = (resources.getInteger(R.integer.draw_stroke_ahlpa_max) * mAlphaUnit).toInt()
 
     private val mUndoList           = ArrayList<Path>()
     private val mUndoPaintList      = ArrayList<Paint>()
@@ -83,7 +85,7 @@ class DrawView: View {
     }
 
     open fun setPenAlpha(alpha: Int?) {
-        this.mPenAlpha   = alpha!!
+        this.mPenAlpha   = (alpha!! * mAlphaUnit).toInt()
         mDrawPaint.alpha = this.mPenAlpha
     }
 

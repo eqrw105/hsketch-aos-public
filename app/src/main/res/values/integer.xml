@@ -2,7 +2,7 @@
 <resources>
     <integer name="draw_stroke_size_max">100</integer>
     <integer name="draw_stroke_size_min">1</integer>
-    <integer name="draw_stroke_ahlpa_max">255</integer>
+    <integer name="draw_stroke_ahlpa_max">100</integer>
     <integer name="draw_stroke_ahlpa_min">1</integer>
     <!--
     100000000 => 1억

@@ -58,7 +58,6 @@ class DM {
         open val mStoreItemIdDonateToDev                    = "donate_to_developer"
         open var mFileExtension                             = ".png"
         open val mGoogleSignRequestCode                     = 1002
-        open val mPictureStatusCheking                      = 0
         open val mPictureStatusAgree                        = 1
         open val mPictureStatusUnagree                      = 2
         open val mNoticeImportanceNormal                    = 0

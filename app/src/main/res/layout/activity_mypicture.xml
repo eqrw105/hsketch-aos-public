@@ -57,7 +57,7 @@
                     android:id="@+id/mypicture_textview_agree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="게시중"
+                    android:text="@string/mypicture_agree"
                     android:textColor="@color/textPrimary"
                     android:textSize="@dimen/textsize_large"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/mypicture_constraintlayout_checking"
+                android:id="@+id/mypicture_constraintlayout_unagree"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_medium"
@@ -89,45 +89,10 @@
 
 
                 <TextView
-                    android:id="@+id/mypicture_textview_checking"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="검토중"
-                    android:textColor="@color/textPrimary"
-                    android:textSize="@dimen/textsize_large"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/mypicture_recyclerview_checking"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/margin_medium"
-                    android:nestedScrollingEnabled="false"
-                    app:layout_constraintDimensionRatio="@string/picture_vertical_ratio"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/mypicture_textview_checking" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/mypicture_constraintlayout_unagree"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_medium"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/mypicture_constraintlayout_checking"
-                tools:layout_editor_absoluteX="10dp">
-
-
-                <TextView
                     android:id="@+id/mypicture_textview_unagree"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="비승인"
+                    android:text="@string/mypicture_unagree"
                     android:textColor="@color/textPrimary"
                     android:textSize="@dimen/textsize_large"
                     app:layout_constraintEnd_toEndOf="parent"

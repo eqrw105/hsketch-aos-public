@@ -22,6 +22,8 @@ import kotlin.properties.Delegates
 class PictureDetailActivity : AppCompatActivity() {
     private lateinit var mPicture_Detail_Textview_Title       : TextView
     private lateinit var mPicture_Detail_Textview_Description : TextView
+    private lateinit var mPicture_Detail_Textview_Useremail   : TextView
+    private lateinit var mPicture_Detail_Textview_Date        : TextView
     private lateinit var mPicture_Detail_Textview_Favorite    : TextView
     private lateinit var mPicture_Detail_Imageview_Back       : ImageView
     private lateinit var mPicture_Detail_Imageview            : ImageView
@@ -42,6 +44,8 @@ class PictureDetailActivity : AppCompatActivity() {
         //bind
         mPicture_Detail_Textview_Title       = findViewById(R.id.picture_detail_textview_title)
         mPicture_Detail_Textview_Description = findViewById(R.id.picture_detail_textview_description)
+        mPicture_Detail_Textview_Date        = findViewById(R.id.picture_detail_textview_date)
+        mPicture_Detail_Textview_Useremail   = findViewById(R.id.picture_detail_textview_useremail)
         mPicture_Detail_Imageview_Back       = findViewById(R.id.picture_detail_imageview_back)
         mPicture_Detail_Imageview            = findViewById(R.id.picture_detail_imageview)
         mPicture_Detail_Imageview_Favorite   = findViewById(R.id.picture_detail_imageview_favorite)
@@ -135,11 +139,14 @@ class PictureDetailActivity : AppCompatActivity() {
             val picture_description = jsonObject.getString("picture_description")
             val picture_user_email  = jsonObject.getString("picture_user_email")
             val picture_favorite    = jsonObject.getBoolean("picture_favorite")
+            val picture_date        = jsonObject.getString("picture_date")
 
             mPicture_UserId                           = jsonObject.getString("picture_user")
             mPicture_Like                             = jsonObject.getInt("picture_like")
             mPicture_Detail_Textview_Title.text       = picture_title
             mPicture_Detail_Textview_Description.text = picture_description
+            mPicture_Detail_Textview_Useremail.text   = picture_user_email
+            mPicture_Detail_Textview_Date.text        = picture_date
 
             if(picture_favorite){
                 val compress_pictureLike = DM.getInstance().compressInt(this, --mPicture_Like)

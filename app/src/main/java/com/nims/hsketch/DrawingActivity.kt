@@ -85,10 +85,12 @@ class DrawingActivity : AppCompatActivity(), ColorPickerDialogListener {
     }
 
     private fun drawViewInit(){
-        mTextview_Pensize.text     = mDrawView.getSize().toInt().toString() + getString(R.string.drawing_pensize_unit)
-        mSeekbar_Pensize.progress  = mDrawView.getSize().toInt()
-        mTextview_Penalpha.text    = mDrawView.getPenAlpha().toString() + getString(R.string.drawing_penalpha_unit)
-        mSeekbar_Penalpha.progress = mDrawView.getPenAlpha()
+        val pensize_init  = resources.getInteger(R.integer.draw_stroke_size_min)
+        val penalpha_init = resources.getInteger(R.integer.draw_stroke_ahlpa_max)
+        mTextview_Pensize.text     = pensize_init.toString() + getString(R.string.drawing_pensize_unit)
+        mSeekbar_Pensize.progress  = pensize_init
+        mTextview_Penalpha.text    = penalpha_init.toString() + getString(R.string.drawing_penalpha_unit)
+        mSeekbar_Penalpha.progress = penalpha_init
 
         mImageview_Pencolor.setColorFilter(mDrawView.getColor())
     }

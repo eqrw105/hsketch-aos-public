@@ -4,6 +4,7 @@
     <dimen name="textsize_large">20sp</dimen>
     <dimen name="textsize_medium">18sp</dimen>
     <dimen name="textsize_regular">16sp</dimen>
+    <dimen name="textsize_mini">14sp</dimen>
 
     <dimen name="margin_regular">5dp</dimen>
     <dimen name="margin_medium">10dp</dimen>
@@ -19,6 +20,8 @@
     <dimen name="picture_image_height">160dp</dimen>
     <dimen name="picture_image_margin">5dp</dimen>
     <dimen name="picture_image_radius">5dp</dimen>
+
+    <dimen name="circle_radius">50dp</dimen>
 
     <dimen name="upload_button_radius">10dp</dimen>
 
