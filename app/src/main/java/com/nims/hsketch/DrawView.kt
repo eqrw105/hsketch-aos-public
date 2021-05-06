@@ -24,7 +24,7 @@ class DrawView: View {
         init()
     }
 
-    private val mAlphaUnit          = 2.25f
+    private val mAlphaUnit          = 2.55f
 
     private val mPenSizeInitailize  = resources.getInteger(R.integer.draw_stroke_size_min).toFloat()
     private val mPenAlphaInitailize = (resources.getInteger(R.integer.draw_stroke_ahlpa_max) * mAlphaUnit).toInt()
